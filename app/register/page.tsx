@@ -119,7 +119,7 @@ export default function RegisterPage() {
 
       {/* LEFT PANEL */}
       <div className="hidden lg:flex flex-col justify-between w-2/5 p-12 text-white" style={{background: "linear-gradient(160deg, #6b0000, #c0392b)"}}>
-        <Link href="/" className="text-2xl font-bold">💍 BandhanBD</Link>
+        <Link href="/" className="text-2xl font-bold">💍 biyekori</Link>
         <div>
           <h2 className="text-4xl font-bold leading-tight mb-4">
             Find Your Perfect Life Partner
@@ -140,7 +140,7 @@ export default function RegisterPage() {
           </div>
         </div>
         <div className="bg-white bg-opacity-10 rounded-2xl p-5">
-          <p className="text-sm text-red-100 italic">"I found my husband on BandhanBD in just 2 months. Highly recommended!"</p>
+          <p className="text-sm text-red-100 italic">"I found my husband on biyekori in just 2 months. Highly recommended!"</p>
           <p className="text-white font-bold mt-2">— Nadia, Dhaka</p>
           <div className="text-yellow-400 mt-1">⭐⭐⭐⭐⭐</div>
         </div>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
 
           {/* Logo for mobile */}
           <div className="lg:hidden text-center mb-6">
-            <Link href="/" className="text-2xl font-bold text-red-700">💍 BandhanBD</Link>
+            <Link href="/" className="text-2xl font-bold text-red-700">💍 biyekori</Link>
           </div>
 
           {/* Progress bar */}

@@ -64,7 +64,7 @@ export default function Home() {
     <div className="min-h-screen font-sans bg-white">
       <header className="text-white py-4 px-8 flex justify-between items-center shadow-lg bg-red-800">
         <Link href="/" className="text-2xl font-bold">
-          💍 BandhanBD
+          💍 biyekori
         </Link>
         <nav className="flex gap-6 items-center">
           <Link href="/" className="hover:underline">{text.home}</Link>
@@ -122,9 +122,9 @@ export default function Home() {
       </section>
 
       <footer className="bg-red-800 text-white text-center py-8 mt-8">
-        <p className="text-lg font-bold">💍 BandhanBD</p>
+        <p className="text-lg font-bold">💍 biyekori</p>
         <p className="text-red-200 text-sm mt-1">{text.footer}</p>
-        <p className="text-red-300 text-xs mt-2">© 2026 BandhanBD. All rights reserved.</p>
+        <p className="text-red-300 text-xs mt-2">© 2026 biyekori. All rights reserved.</p>
       </footer>
     </div>
   );

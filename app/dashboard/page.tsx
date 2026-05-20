@@ -91,10 +91,7 @@ export default function DashboardPage() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({
-        ...formData,
-        age: parseInt(formData.age as string),
-      })
+      .update({ ...formData, age: parseInt(formData.age as string) })
       .eq("email", user.email);
     if (error) {
       setMessage("❌ Error: " + error.message);
@@ -121,7 +118,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-red-800 text-white py-4 px-8 flex justify-between items-center shadow-lg">
         <Link href="/" className="text-2xl font-bold">💍 biyekori</Link>
         <div className="flex items-center gap-4">
@@ -137,7 +133,6 @@ export default function DashboardPage() {
         {/* Profile Header Card */}
         <div className="bg-white rounded-3xl shadow-lg p-8 mb-6">
           <div className="flex items-center gap-8">
-            {/* Photo Upload */}
             <div className="relative flex-shrink-0">
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-red-200 shadow-lg">
                 {profile?.photo_url ? (
@@ -157,7 +152,6 @@ export default function DashboardPage() {
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
             </div>
 
-            {/* Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
                 <h2 className="text-2xl font-bold text-gray-800">{profile?.full_name || "Complete Your Profile"}</h2>
@@ -165,8 +159,6 @@ export default function DashboardPage() {
                 {profile?.is_premium && <span className="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full font-bold">⭐ Premium</span>}
               </div>
               <p className="text-gray-500 mb-3">{profile?.city} • {profile?.religion} • {profile?.profession}</p>
-              
-              {/* Profile completion */}
               <div className="mb-2">
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-500 font-medium">Profile Completion</span>
@@ -183,7 +175,6 @@ export default function DashboardPage() {
               <p className="text-xs text-gray-400">Complete your profile to get 5x more matches!</p>
             </div>
 
-            {/* Quick stats */}
             <div className="hidden md:flex flex-col gap-3 text-center">
               <div className="bg-red-50 rounded-xl p-4">
                 <p className="text-2xl font-bold text-red-700">0</p>
@@ -219,10 +210,8 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Tab Content */}
         <div className="bg-white rounded-3xl shadow-lg p-8">
 
-          {/* PROFILE TAB */}
           {activeTab === "profile" && (
             <div className="space-y-5">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Basic Information</h3>
@@ -282,7 +271,6 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* PERSONAL DETAILS TAB */}
           {activeTab === "personal" && (
             <div className="space-y-5">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Personal Details</h3>
@@ -344,25 +332,23 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* PARTNER PREFERENCE TAB */}
           {activeTab === "partner" && (
             <div className="space-y-5">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Partner Preference</h3>
               <div>
                 <label className="text-sm font-semibold text-gray-600 block mb-1">What are you looking for in a partner?</label>
-                <textarea rows={6} placeholder="Describe your ideal partner — personality, values, lifestyle, religion, education, profession..."
+                <textarea rows={6} placeholder="Describe your ideal partner..."
                   className="border-2 border-gray-200 rounded-xl px-4 py-3 w-full focus:border-red-500 outline-none resize-none"
                   value={formData.partner_preference} onChange={e => setFormData({...formData, partner_preference: e.target.value})} />
               </div>
             </div>
           )}
 
-          {/* FAMILY INFO TAB */}
           {activeTab === "family" && (
             <div className="space-y-5">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Family Information</h3>
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-                <p className="text-blue-700 text-sm font-medium">👨‍👩‍👧 Family involvement is very important in Bangladeshi marriages. You can allow a guardian to manage your profile.</p>
+                <p className="text-blue-700 text-sm font-medium">👨‍👩‍👧 Family involvement is very important in Bangladeshi marriages.</p>
               </div>
               <div className="flex items-center gap-3 mb-4">
                 <input type="checkbox" id="family" className="w-5 h-5 accent-red-700"
@@ -388,12 +374,11 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* PRIVACY TAB */}
           {activeTab === "privacy" && (
             <div className="space-y-5">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Privacy Settings</h3>
               <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
-                <p className="text-green-700 text-sm font-medium">🔒 Your privacy is our top priority. Control who sees your photo and contact details.</p>
+                <p className="text-green-700 text-sm font-medium">🔒 Your privacy is our top priority.</p>
               </div>
               <div>
                 <label className="text-sm font-semibold text-gray-600 block mb-2">Who can see my photo?</label>
@@ -420,7 +405,6 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Save Button */}
           <div className="mt-8 flex gap-4">
             <button onClick={handleSave} disabled={saving}
               className="flex-1 text-white py-4 rounded-xl font-bold text-lg shadow-lg disabled:opacity-50"
