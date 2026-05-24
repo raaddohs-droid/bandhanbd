@@ -3,7 +3,6 @@ import { useState } from "react";
 import AIPhotoCropper from "./AIPhotoCropper";
 
 interface ProfileData {
-  // Step 1: Basic Info
   profileManagedBy: string;
   lookingFor: "bride" | "groom" | "";
   name: string;
@@ -15,15 +14,11 @@ interface ProfileData {
   maritalStatus: string;
   hasChildren: string;
   childrenStayWith: string;
-  
-  // Step 2: Location
   currentlyLivesIn: string;
   dhakaArea: string;
   nrbCountry: string;
   familyHomeDistrict: string;
   willingToRelocate: string;
-  
-  // Step 3: Education & Career
   education: string;
   institutionType: string;
   studiedAbroadCountry: string;
@@ -32,16 +27,12 @@ interface ProfileData {
   profession: string;
   monthlyIncome: string;
   workAfterMarriage: string;
-  
-  // Step 4: Religion
   religion: string;
   religiousPractice: string;
   namaz: string;
   quranReading: string;
   hijab: string;
   beard: string;
-  
-  // Step 5: Family
   familyType: string;
   familyValues: string;
   fatherProfession: string;
@@ -49,23 +40,17 @@ interface ProfileData {
   siblings: string;
   homeOwnership: string;
   livingAfterMarriage: string;
-  
-  // Step 6: Lifestyle
   motherTongue: string;
   englishSpeaking: string;
   diet: string;
   health: string;
   smoke: string;
   drink: string;
-  
-  // Step 7: About & Preferences
   aboutMe: string;
   lookingForInPartner: string;
   favoriteSong: string;
   favoriteMovie: string;
   hobbies: string;
-  
-  // Step 8: Photos & Privacy
   photoVisibility: string;
   wantVerification: string;
   communicationPreference: string;
@@ -145,7 +130,7 @@ export default function CreateProfileForm() {
   };
 
   const handleAIAssist = async (field: "aboutMe" | "lookingForInPartner") => {
-    alert("AI assistance coming soon! Will help you write compelling profile text.");
+    alert("AI assistance coming soon!");
   };
 
   const handlePhotoCrop = (croppedImageBase64: string) => {
@@ -160,10 +145,9 @@ export default function CreateProfileForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 py-12 px-4">
       <div className="max-w-3xl mx-auto">
-        {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex justify-between mb-2">
-            <span className="text-sm font-bold text-gray-900">Step {step} of {totalSteps}</span>
+            <span className="text-sm font-bold text-gray-700">Step {step} of {totalSteps}</span>
             <span className="text-sm font-bold text-pink-600">{Math.round((step / totalSteps) * 100)}% Complete</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
@@ -174,19 +158,17 @@ export default function CreateProfileForm() {
           </div>
         </div>
 
-        {/* Form Card */}
         <div className="bg-white rounded-3xl shadow-2xl p-8">
-          {/* Step 1: Basic Info */}
           {step === 1 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-black text-gray-900 mb-6">👤 Basic Information</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-6">Basic Information</h2>
               
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">This profile is managed by *</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">This profile is managed by *</label>
                 <select
                   value={formData.profileManagedBy}
                   onChange={(e) => updateField("profileManagedBy", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                 >
                   <option value="">Select</option>
                   <option value="Self">Self</option>
@@ -198,11 +180,11 @@ export default function CreateProfileForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">I am looking for *</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">I am looking for *</label>
                 <select
                   value={formData.lookingFor}
                   onChange={(e) => updateField("lookingFor", e.target.value as "bride" | "groom")}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                 >
                   <option value="">Select</option>
                   <option value="bride">Bride</option>
@@ -211,45 +193,47 @@ export default function CreateProfileForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Full name *</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Full name *</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => updateField("name", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                   placeholder="Enter full name"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Age *</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Age *</label>
                   <input
                     type="number"
+min="18"
+  max="80"
                     value={formData.age}
                     onChange={(e) => updateField("age", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                     placeholder="Age"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Date of birth *</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Date of birth *</label>
                   <input
                     type="date"
                     value={formData.dateOfBirth}
                     onChange={(e) => updateField("dateOfBirth", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Height *</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Height *</label>
                   <select
                     value={formData.height}
                     onChange={(e) => updateField("height", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                   >
                     <option value="">Select</option>
                     <option value="4ft 6in">4ft 6in</option>
@@ -278,12 +262,12 @@ export default function CreateProfileForm() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Weight (kg)</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Weight (kg)</label>
                   <input
                     type="number"
                     value={formData.weight}
                     onChange={(e) => updateField("weight", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                     placeholder="Weight"
                   />
                 </div>
@@ -291,11 +275,11 @@ export default function CreateProfileForm() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Blood group</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Blood group</label>
                   <select
                     value={formData.bloodGroup}
                     onChange={(e) => updateField("bloodGroup", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                   >
                     <option value="">Select</option>
                     <option value="A+">A+</option>
@@ -309,11 +293,11 @@ export default function CreateProfileForm() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Marital status *</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Marital status *</label>
                   <select
                     value={formData.maritalStatus}
                     onChange={(e) => updateField("maritalStatus", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                   >
                     <option value="">Select</option>
                     <option value="Never married">Never married</option>
@@ -326,11 +310,11 @@ export default function CreateProfileForm() {
               {(formData.maritalStatus === "Divorced" || formData.maritalStatus === "Widowed") && (
                 <>
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-2">Do you have children? *</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Do you have children? *</label>
                     <select
                       value={formData.hasChildren}
                       onChange={(e) => updateField("hasChildren", e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                     >
                       <option value="">Select</option>
                       <option value="No">No</option>
@@ -342,11 +326,11 @@ export default function CreateProfileForm() {
 
                   {formData.hasChildren.startsWith("Yes") && (
                     <div>
-                      <label className="block text-sm font-bold text-gray-900 mb-2">Children stay with *</label>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Children stay with *</label>
                       <select
                         value={formData.childrenStayWith}
                         onChange={(e) => updateField("childrenStayWith", e.target.value)}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                       >
                         <option value="">Select</option>
                         <option value="Me">Me</option>
@@ -360,15 +344,13 @@ export default function CreateProfileForm() {
               )}
             </div>
           )}
-
-          {/* Step 8: Photos & Privacy - WITH AI PHOTO CROPPER */}
-          {step === 8 && (
+{step === 8 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-black text-gray-900 mb-6">📸 Photos & Privacy</h2>
               
               <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border-2 border-blue-200">
                 <h3 className="text-lg font-bold text-gray-900 mb-3">📸 AI Photo Cropper</h3>
-                <p className="text-sm text-gray-900 mb-4">Upload your photo and our AI will automatically crop it to professional passport style!</p>
+                <p className="text-sm text-gray-700 mb-4">Upload your photo and our AI will automatically crop it to professional passport style!</p>
                 
                 <AIPhotoCropper onPhotoCropped={handlePhotoCrop} />
                 
@@ -380,11 +362,11 @@ export default function CreateProfileForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Photo visibility</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Photo visibility</label>
                 <select
                   value={formData.photoVisibility}
                   onChange={(e) => updateField("photoVisibility", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                 >
                   <option value="">Select</option>
                   <option value="Visible to all">Visible to all verified users</option>
@@ -394,11 +376,11 @@ export default function CreateProfileForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Want profile verification?</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Want profile verification?</label>
                 <select
                   value={formData.wantVerification}
                   onChange={(e) => updateField("wantVerification", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                 >
                   <option value="">Select</option>
                   <option value="Yes">Yes, verify my profile</option>
@@ -407,11 +389,11 @@ export default function CreateProfileForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">How to communicate</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">How to communicate</label>
                 <select
                   value={formData.communicationPreference}
                   onChange={(e) => updateField("communicationPreference", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
                 >
                   <option value="">Select</option>
                   <option value="Direct">Direct messages welcome</option>
@@ -422,13 +404,12 @@ export default function CreateProfileForm() {
             </div>
           )}
 
-          {/* Navigation Buttons */}
           <div className="flex justify-between mt-8 pt-6 border-t-2">
             {step > 1 && (
               <button
                 type="button"
                 onClick={prevStep}
-                className="px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-900 hover:bg-gray-50"
+                className="px-6 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-50"
               >
                 ← Previous
               </button>
