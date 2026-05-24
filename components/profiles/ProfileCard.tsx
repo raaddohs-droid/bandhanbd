@@ -1,181 +1,195 @@
-'use client'
+"use client";
+import { useState } from "react";
 
-import { Profile } from '@/types/profile'
-import Link from 'next/link'
-import { Heart, Eye } from 'lucide-react'
-
-interface ProfileCardProps {
-  profile: Profile
+interface Profile {
+  id: string;
+  lookingFor?: "bride" | "groom";
+  full_name?: string;
+  name?: string;
+  age: number;
+  height: string;
+  location?: string;
+  city?: string;
+  education: string;
+  profession: string;
+  monthlyIncome?: number;
+  religion: string;
+  maritalStatus?: string;
+  marital_status?: string;
+  photoUrl?: string;
+  photo_url?: string;
+  isVerified?: boolean;
+  is_verified?: boolean;
+  isPremium?: boolean;
+  is_premium?: boolean;
+  isPhotoVisible?: boolean;
+  photo_visible?: boolean;
+  lastActive?: string;
+  last_active?: string;
+  managedBy?: string;
+  managed_by?: string;
+  familyType?: string;
+  family_type?: string;
+  religiousPractice?: string;
+  religious_practice?: string;
 }
 
-export default function ProfileCard({ profile }: ProfileCardProps) {
-  // Generate initials for avatar
-  const initials = profile.full_name
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
+export default function ProfileCard({ profile }: { profile: Profile }) {
+  const [showContact, setShowContact] = useState(false);
 
-  // Determine if profile is "premium" (for demo, every 3rd profile)
-  const isPremium = profile.id % 3 === 0
-  
-  // Determine if profile is "verified" (for demo, profiles with even IDs)
-  const isVerified = profile.id % 2 === 0
-
-  // Gender emoji
-  const genderEmoji = profile.gender === 'Male' ? '🤵' : '👰'
-
-  // Calculate how long ago profile was created
-  const getActiveStatus = (createdAt: string) => {
-    const now = new Date()
-    const created = new Date(createdAt)
-    const diffMs = now.getTime() - created.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMs / 3600000)
-    const diffDays = Math.floor(diffMs / 86400000)
-
-    if (diffMins < 60) return `${diffMins}m ago`
-    if (diffHours < 24) return `${diffHours}h ago`
-    if (diffDays === 1) return 'Yesterday'
-    if (diffDays < 7) return `${diffDays}d ago`
-    return 'Active recently'
-  }
-
-  // Format location display
-  const locationDisplay = profile.location_detail 
-    ? `${profile.location_detail}, ${profile.city || 'Bangladesh'}`
-    : profile.city || 'Bangladesh'
+  // Handle different field naming conventions (camelCase vs snake_case)
+  const name = profile.full_name || profile.name || "Anonymous";
+  const location = profile.location || profile.city || "Not specified";
+  const maritalStatus = profile.maritalStatus || profile.marital_status || "Not specified";
+  const photoUrl = profile.photoUrl || profile.photo_url;
+  const isVerified = profile.isVerified || profile.is_verified || false;
+  const isPremium = profile.isPremium || profile.is_premium || false;
+  const isPhotoVisible = profile.isPhotoVisible || profile.photo_visible || false;
+  const lastActive = profile.lastActive || profile.last_active || "Recently";
+  const managedBy = profile.managedBy || profile.managed_by || "Self";
+  const familyType = profile.familyType || profile.family_type || "Not specified";
+  const religiousPractice = profile.religiousPractice || profile.religious_practice || "Not specified";
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200">
-      {/* Badges Row */}
-      <div className="flex items-center gap-2 p-3 bg-gray-50 border-b border-gray-200">
-        {isPremium && (
-          <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-1 rounded flex items-center gap-1">
-            ⭐ PREMIUM
-          </span>
-        )}
-        {isVerified && (
-          <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded flex items-center gap-1">
-            ✓ VERIFIED
-          </span>
-        )}
-      </div>
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 relative group">
+      
+      {/* Premium Badge */}
+      {isPremium && (
+        <div className="absolute top-3 right-3 z-10">
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+            <span>⭐</span>
+            <span>PREMIUM</span>
+          </div>
+        </div>
+      )}
+
+      {/* Verification Badge */}
+      {isVerified && (
+        <div className="absolute top-3 left-3 z-10">
+          <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+            <span>✓</span>
+            <span>VERIFIED</span>
+          </div>
+        </div>
+      )}
 
       {/* Photo Section */}
-      <div className="relative">
-        <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-rose-50 to-pink-50">
-          {/* Avatar Circle - NOW WITH PHOTO SUPPORT */}
-          <div className="flex-shrink-0">
-            {profile.photo_url ? (
-              <img 
-                src={profile.photo_url} 
-                alt={profile.full_name}
-                className="w-16 h-16 rounded-full object-cover shadow-md border-2 border-white"
-              />
-            ) : (
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white text-2xl font-bold shadow-md">
-                {initials}
-              </div>
-            )}
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-2xl mb-1">
-              <span>{genderEmoji}</span>
-              <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded">
-                {profile.photo_url ? 'Photo available' : 'Photo on request'}
+      <div className="relative bg-gradient-to-br from-red-50 to-rose-50 h-80">
+        {isPhotoVisible && photoUrl ? (
+          <img 
+            src={photoUrl} 
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
+            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mb-3">
+              <span className="text-5xl">
+                {profile.lookingFor === "bride" ? "👰" : "🤵"}
               </span>
             </div>
-            <p className="text-xs text-gray-500">{getActiveStatus(profile.created_at)}</p>
+            <p className="text-sm font-medium">Photo on request</p>
+          </div>
+        )}
+        
+        {/* Active Status */}
+        <div className="absolute bottom-3 left-3">
+          <div className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 shadow-lg flex items-center gap-1.5">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span>{lastActive}</span>
           </div>
         </div>
       </div>
 
-      {/* Profile Details */}
-      <div className="p-4">
-        {/* Name */}
-        <h3 className="text-lg font-bold text-gray-900 mb-1">
-          {profile.full_name}
-        </h3>
-
-        {/* Managed By */}
-        <p className="text-xs text-gray-500 mb-3">By {profile.managed_by || 'Self'}</p>
-
-        {/* Quick Stats */}
-        <div className="flex items-center gap-2 text-sm text-gray-700 mb-4">
-          <span className="font-medium">{profile.age ? `${profile.age}y` : 'N/A'}</span>
-          <span>•</span>
-          <span>{profile.height || 'N/A'}</span>
-          <span>•</span>
-          <span>{profile.marital_status || 'Never married'}</span>
-        </div>
-
-        {/* Details with Emojis - REAL DATA */}
-        <div className="space-y-2 text-sm mb-4">
-          <div className="flex items-start gap-2">
-            <span>📍</span>
-            <span className="text-gray-700">{locationDisplay}</span>
+      {/* Content Section */}
+      <div className="p-5">
+        
+        {/* Name & Basic Info */}
+        <div className="mb-4">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{name}</h3>
+              <p className="text-sm text-gray-500 mt-0.5">By {managedBy}</p>
+            </div>
           </div>
-          
-          {profile.education && (
-            <div className="flex items-start gap-2">
-              <span>🎓</span>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500">Education</p>
-                <p className="text-gray-700">{profile.education}</p>
-              </div>
-            </div>
-          )}
-          
-          {profile.occupation && (
-            <div className="flex items-start gap-2">
-              <span>💼</span>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500">Work</p>
-                <p className="text-gray-700">{profile.occupation}</p>
-              </div>
-            </div>
-          )}
-          
-          {profile.family_type && (
-            <div className="flex items-start gap-2">
-              <span>👨‍👩‍👧</span>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500">Family</p>
-                <p className="text-gray-700">{profile.family_type}</p>
-              </div>
-            </div>
-          )}
-          
-          {profile.religious_level && (
-            <div className="flex items-start gap-2">
-              <span>🕌</span>
-              <div className="flex-1">
-                <p className="text-xs text-gray-500">Religious</p>
-                <p className="text-gray-700">{profile.religious_level}</p>
-              </div>
-            </div>
-          )}
+
+          <div className="flex flex-wrap gap-2 mt-3">
+            <span className="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
+              {profile.age} years
+            </span>
+            <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+              {profile.height}
+            </span>
+            <span className="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
+              {maritalStatus}
+            </span>
+          </div>
         </div>
+
+        {/* Key Details Grid */}
+        <div className="grid grid-cols-2 gap-4 mb-4 pb-4 border-b border-gray-100">
+          <div>
+            <p className="text-xs text-gray-500 mb-1">📍 Location</p>
+            <p className="text-sm font-semibold text-gray-900">{location}</p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 mb-1">🎓 Education</p>
+            <p className="text-sm font-semibold text-gray-900">{profile.education}</p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 mb-1">💼 Profession</p>
+            <p className="text-sm font-semibold text-gray-900">{profile.profession}</p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 mb-1">🕌 Religion</p>
+            <p className="text-sm font-semibold text-gray-900">{profile.religion}</p>
+          </div>
+        </div>
+
+        {/* Family & Religious Info */}
+        <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+          <div className="bg-gray-50 p-2.5 rounded-lg">
+            <p className="text-gray-600 mb-1">Family</p>
+            <p className="font-semibold text-gray-900">{familyType}</p>
+          </div>
+          <div className="bg-gray-50 p-2.5 rounded-lg">
+            <p className="text-gray-600 mb-1">Religious</p>
+            <p className="font-semibold text-gray-900">{religiousPractice}</p>
+          </div>
+        </div>
+
+        {/* Income (if available) */}
+        {profile.monthlyIncome && (
+          <div className="bg-green-50 p-3 rounded-lg mb-4">
+            <p className="text-xs text-green-700 mb-1">💰 Monthly Income</p>
+            <p className="text-sm font-bold text-green-900">৳{profile.monthlyIncome.toLocaleString()}</p>
+          </div>
+        )}
 
         {/* Action Buttons */}
-        <div className="flex gap-2">
-          <button className="flex-1 bg-rose-500 hover:bg-rose-600 text-white text-sm font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
-            <Heart className="w-4 h-4" />
-            Interest
-          </button>
-          <Link 
-            href={`/profiles/${profile.id}`}
-            className="flex-1 border-2 border-rose-500 text-rose-500 hover:bg-rose-50 text-sm font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-2"
+        <div className="grid grid-cols-2 gap-3">
+          <button 
+            onClick={() => alert('Please login first to send interest!\n\nAuthentication system coming soon.')}
+            className="bg-gradient-to-r from-red-600 to-rose-600 text-white py-3 px-4 rounded-xl font-semibold text-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            <Eye className="w-4 h-4" />
-            View
-          </Link>
+            💌 Send Interest
+          </button>
+          <a 
+            href={`/profile/${profile.id}`}
+            className="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold text-sm hover:bg-gray-200 transition-all duration-300 flex items-center justify-center"
+          >
+            👁️ View Profile
+          </a>
         </div>
+
+        {/* Contact Info placeholder */}
+        {showContact && (
+          <div className="mt-4 p-4 bg-red-50 rounded-xl border border-red-100 animate-fadeIn">
+            <p className="text-xs font-semibold text-red-900 mb-2">📞 Contact Information</p>
+            <p className="text-sm text-gray-700">Please login to view contact details.</p>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
