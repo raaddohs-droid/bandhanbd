@@ -168,7 +168,7 @@ export default function CreateProfileForm() {
                 <select
                   value={formData.profileManagedBy}
                   onChange={(e) => updateField("profileManagedBy", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                 >
                   <option value="">Select</option>
                   <option value="Self">Self</option>
@@ -184,7 +184,7 @@ export default function CreateProfileForm() {
                 <select
                   value={formData.lookingFor}
                   onChange={(e) => updateField("lookingFor", e.target.value as "bride" | "groom")}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                 >
                   <option value="">Select</option>
                   <option value="bride">Bride</option>
@@ -198,7 +198,7 @@ export default function CreateProfileForm() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => updateField("name", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                   placeholder="Enter full name"
                 />
               </div>
@@ -212,7 +212,7 @@ min="18"
   max="80"
                     value={formData.age}
                     onChange={(e) => updateField("age", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                     placeholder="Age"
                   />
                 </div>
@@ -222,7 +222,7 @@ min="18"
                     type="date"
                     value={formData.dateOfBirth}
                     onChange={(e) => updateField("dateOfBirth", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                   />
                 </div>
               </div>
@@ -233,7 +233,7 @@ min="18"
                   <select
                     value={formData.height}
                     onChange={(e) => updateField("height", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                   >
                     <option value="">Select</option>
                     <option value="4ft 6in">4ft 6in</option>
@@ -267,7 +267,7 @@ min="18"
                     type="number"
                     value={formData.weight}
                     onChange={(e) => updateField("weight", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                     placeholder="Weight"
                   />
                 </div>
@@ -279,7 +279,7 @@ min="18"
                   <select
                     value={formData.bloodGroup}
                     onChange={(e) => updateField("bloodGroup", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                   >
                     <option value="">Select</option>
                     <option value="A+">A+</option>
@@ -297,7 +297,7 @@ min="18"
                   <select
                     value={formData.maritalStatus}
                     onChange={(e) => updateField("maritalStatus", e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                   >
                     <option value="">Select</option>
                     <option value="Never married">Never married</option>
@@ -314,7 +314,7 @@ min="18"
                     <select
                       value={formData.hasChildren}
                       onChange={(e) => updateField("hasChildren", e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                     >
                       <option value="">Select</option>
                       <option value="No">No</option>
@@ -330,7 +330,7 @@ min="18"
                       <select
                         value={formData.childrenStayWith}
                         onChange={(e) => updateField("childrenStayWith", e.target.value)}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                       >
                         <option value="">Select</option>
                         <option value="Me">Me</option>
@@ -366,7 +366,7 @@ min="18"
                 <select
                   value={formData.photoVisibility}
                   onChange={(e) => updateField("photoVisibility", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                 >
                   <option value="">Select</option>
                   <option value="Visible to all">Visible to all verified users</option>
@@ -380,7 +380,7 @@ min="18"
                 <select
                   value={formData.wantVerification}
                   onChange={(e) => updateField("wantVerification", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                 >
                   <option value="">Select</option>
                   <option value="Yes">Yes, verify my profile</option>
@@ -393,7 +393,7 @@ min="18"
                 <select
                   value={formData.communicationPreference}
                   onChange={(e) => updateField("communicationPreference", e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none text-gray-900"
                 >
                   <option value="">Select</option>
                   <option value="Direct">Direct messages welcome</option>
