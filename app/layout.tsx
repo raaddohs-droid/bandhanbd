@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     title: 'Biye Kori - Bangladesh #1 Verified Matrimony',
     description: '100% NID verified Muslim matrimony. No ghotok fees. 10000+ families trust us.',
   },
+  verification: {
+    google: 'h7-K_hB2d_k5XJ23xooLMRuc5GiRaZ1mvmtlwyYB2D8',
+  },
 }
 
 export default function RootLayout({
