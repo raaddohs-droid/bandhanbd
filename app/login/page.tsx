@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import ProfileCard from "@/components/profiles/ProfileCard"
 
 export default function BrowseProfiles() {
-  const [profiles, setProfiles] = useState([])
+  const [profiles, setProfiles] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
