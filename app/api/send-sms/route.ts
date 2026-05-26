@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
     console.log('Phone type:', typeof phone);
     console.log('Received message:', message);
 
-    // Remove +880 and keep only the number
-    const cleanPhone = phone.replace('+880', '88')
+    // Remove + sign only
+    const cleanPhone = phone.replace('+', '')
     
     console.log('Clean phone after replace:', cleanPhone);
 
