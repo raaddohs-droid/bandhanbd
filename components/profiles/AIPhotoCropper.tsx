@@ -72,12 +72,13 @@ export default function AIPhotoCropper({ onPhotoSelect, uploadCount }: AIPhotoCr
           const face = detection.boundingBox;
           
           if (face) {
+            // BoundingBox has: originX, originY, width, height
             const padding = 0.3;
             const paddedWidth = face.width * (1 + padding);
             const paddedHeight = face.height * (1 + padding);
             
-            const x = Math.max(0, face.x - (paddedWidth - face.width) / 2);
-            const y = Math.max(0, face.y - (paddedHeight - face.height) / 2);
+            const x = Math.max(0, face.originX - (paddedWidth - face.width) / 2);
+            const y = Math.max(0, face.originY - (paddedHeight - face.height) / 2);
             
             const cropWidth = Math.min(paddedWidth, img.width - x);
             const cropHeight = Math.min(paddedHeight, img.height - y);
@@ -90,6 +91,7 @@ export default function AIPhotoCropper({ onPhotoSelect, uploadCount }: AIPhotoCr
               0, 0, 500, 500
             );
           } else {
+            // No face - center crop
             const size = Math.min(img.width, img.height);
             const x = (img.width - size) / 2;
             const y = (img.height - size) / 2;
@@ -101,6 +103,7 @@ export default function AIPhotoCropper({ onPhotoSelect, uploadCount }: AIPhotoCr
             );
           }
         } else {
+          // No face detected - center crop
           const size = Math.min(img.width, img.height);
           const x = (img.width - size) / 2;
           const y = (img.height - size) / 2;
