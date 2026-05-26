@@ -36,16 +36,16 @@ export default function ProfileCard({ profile }: { profile: Profile }) {
   const name = profile.full_name || profile.name || "Anonymous";
   const location = profile.location || profile.city || "Bangladesh";
   const maritalStatus = profile.maritalStatus || profile.marital_status || "Not specified";
-  const photoUrl = profile.photoUrl || profile.photo_url;
+  
+  // CRITICAL FIX: Get photo URL with fallback
+  const photoUrl = profile.photo_url || profile.photoUrl;
+  
   const isVerified = profile.isVerified || profile.is_verified || false;
   const isPremium = profile.isPremium || profile.is_premium || profile.package !== 'prottasha';
   const monthlyIncome = profile.monthlyIncome || profile.monthly_income;
 
-  // FREE USER - Can only see limited info
-  const isUserFree = true; // TODO: Get from localStorage
-  const isUserVerified = false; // TODO: Get from localStorage
-
-  // Contact details should be hidden unless user is premium OR verified
+  const isUserFree = true;
+  const isUserVerified = false;
   const canViewContact = isUserVerified || !isUserFree;
 
   const handleSendInterest = () => {
@@ -59,102 +59,99 @@ export default function ProfileCard({ profile }: { profile: Profile }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 relative group">
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group">
       
-      {/* Premium Badge */}
       {isPremium && (
         <div className="absolute top-3 right-3 z-10">
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-            <span>⭐</span> PREMIUM
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+            ⭐ PREMIUM
           </div>
         </div>
       )}
 
-      {/* Verified Badge */}
       {isVerified && (
         <div className="absolute top-3 left-3 z-10">
-          <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-            <span>✓</span> VERIFIED
+          <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+            ✓ VERIFIED
           </div>
         </div>
       )}
 
-      {/* Photo Section */}
-      <div className="relative h-64 bg-gradient-to-br from-rose-100 to-pink-100 overflow-hidden">
+      {/* Photo Section - FIXED */}
+      <div className="relative h-80 bg-gradient-to-br from-rose-50 to-pink-50 overflow-hidden">
         {photoUrl ? (
           <img 
             src={photoUrl} 
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              // Fallback if image fails to load
+              e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+👤PC90ZXh0Pjwvc3ZnPg==';
+            }}
           />
         ) : (
           <div className="flex items-center justify-center h-full">
-            <div className="text-6xl">👤</div>
+            <div className="text-8xl">👤</div>
           </div>
         )}
         
-        {/* Photo Blur for Free Users */}
         {isUserFree && (
-          <div className="absolute inset-0 backdrop-blur-sm bg-white/20 flex items-center justify-center">
-            <div className="bg-black/70 text-white px-4 py-2 rounded-lg text-sm font-bold">
+          <div className="absolute inset-0 backdrop-blur-[2px] bg-white/10 flex items-center justify-center">
+            <div className="bg-black/80 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-xl">
               🔒 Send Interest to Unlock
             </div>
           </div>
         )}
       </div>
 
-      {/* Profile Info */}
-      <div className="p-5">
-        {/* Name & Age */}
+      <div className="p-6">
+        
         <div className="mb-4">
-          <h3 className="text-xl font-black text-gray-900 mb-1">
+          <h3 className="text-2xl font-black text-gray-900 mb-2">
             {isUserFree ? name.charAt(0) + "***" : name}
           </h3>
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <span>🎂 {profile.age} years</span>
-            <span>📏 {profile.height}</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold">
+          <div className="flex items-center gap-3 text-sm text-gray-600 flex-wrap">
+            <span className="flex items-center gap-1">🎂 {profile.age} years</span>
+            <span className="flex items-center gap-1">📏 {profile.height}</span>
+            <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold">
               {maritalStatus}
             </span>
           </div>
         </div>
 
-        {/* Quick Info Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
-          <div>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="bg-gray-50 p-3 rounded-xl">
             <p className="text-xs text-gray-500 mb-1">📍 Location</p>
-            <p className="font-semibold text-gray-900">{location}</p>
+            <p className="font-bold text-gray-900 text-sm">{location}</p>
           </div>
-          <div>
+          <div className="bg-gray-50 p-3 rounded-xl">
             <p className="text-xs text-gray-500 mb-1">🎓 Education</p>
-            <p className="font-semibold text-gray-900">{profile.education}</p>
+            <p className="font-bold text-gray-900 text-sm">{profile.education}</p>
           </div>
-          <div>
+          <div className="bg-gray-50 p-3 rounded-xl">
             <p className="text-xs text-gray-500 mb-1">💼 Profession</p>
-            <p className="font-semibold text-gray-900">{profile.profession}</p>
+            <p className="font-bold text-gray-900 text-sm">{profile.profession}</p>
           </div>
-          <div>
+          <div className="bg-gray-50 p-3 rounded-xl">
             <p className="text-xs text-gray-500 mb-1">🕌 Religion</p>
-            <p className="font-semibold text-gray-900">{profile.religion}</p>
+            <p className="font-bold text-gray-900 text-sm">{profile.religion}</p>
           </div>
         </div>
 
-        {/* Income - Blurred for Free */}
         {monthlyIncome && (
-          <div className="bg-green-50 p-3 rounded-lg mb-4 relative">
-            <p className="text-xs text-green-700 mb-1">💰 Monthly Income</p>
-            <p className="text-sm font-bold text-green-900">
+          <div className="bg-green-50 p-4 rounded-xl mb-4 relative overflow-hidden">
+            <p className="text-xs text-green-700 mb-1 font-bold">💰 Monthly Income</p>
+            <p className="text-lg font-black text-green-900">
               {isUserFree ? '৳ ****' : `৳${monthlyIncome.toLocaleString()}`}
             </p>
             {isUserFree && (
-              <div className="absolute inset-0 backdrop-blur-sm bg-white/50 flex items-center justify-center rounded-lg">
+              <div className="absolute inset-0 backdrop-blur-sm bg-white/60 flex items-center justify-center rounded-xl">
                 <span className="text-xs font-bold text-gray-700">🔒 Premium Only</span>
               </div>
             )}
           </div>
         )}
 
-        {/* CONTACT DETAILS - BLOCKED UNTIL VERIFIED/PREMIUM */}
         {!canViewContact && (
           <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 mb-4">
             <p className="text-sm font-bold text-red-900 mb-2">
@@ -172,7 +169,6 @@ export default function ProfileCard({ profile }: { profile: Profile }) {
           </div>
         )}
 
-        {/* Show Contact if User is Verified/Premium */}
         {canViewContact && profile.phone && (
           <div className="bg-green-50 border-2 border-green-300 rounded-xl p-4 mb-4">
             <p className="text-xs font-bold text-green-900 mb-2">📞 Contact Details</p>
@@ -187,42 +183,37 @@ export default function ProfileCard({ profile }: { profile: Profile }) {
           </div>
         )}
 
-        {/* Action Buttons */}
         <div className="space-y-3">
           
-          {/* Send Interest Button */}
           {!interestSent ? (
             <button 
               onClick={handleSendInterest}
-              className="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white py-3 px-4 rounded-xl font-semibold text-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white py-4 px-4 rounded-xl font-bold text-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               💌 Send Interest
             </button>
           ) : (
-            <div className="w-full bg-green-100 border-2 border-green-500 text-green-800 py-3 px-4 rounded-xl font-semibold text-sm text-center">
+            <div className="w-full bg-green-100 border-2 border-green-500 text-green-800 py-4 px-4 rounded-xl font-bold text-sm text-center">
               ✓ Interest Sent! Waiting for response...
             </div>
           )}
 
-          {/* View Profile & Send Gift Row */}
           <div className="grid grid-cols-2 gap-3">
             <Link 
               href={`/profile/${profile.id}`}
-              className="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold text-sm hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-1"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-4 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-1"
             >
-              👁️ View
+              👁️ View Full Profile
             </Link>
             
-            {/* Send Gift Button */}
             <div className="relative">
               <button
                 onClick={() => setShowGiftMenu(!showGiftMenu)}
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 px-4 rounded-xl font-semibold text-sm hover:shadow-lg transition-all"
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 px-4 rounded-xl font-bold text-sm hover:shadow-lg transition-all"
               >
-                🎁 Gift
+                🎁 Send Gift
               </button>
               
-              {/* Gift Menu Popup */}
               {showGiftMenu && (
                 <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-2xl border-2 border-pink-200 p-3 w-64 z-20">
                   <p className="text-xs font-bold text-gray-900 mb-3">Send Virtual Gift 🎁</p>
@@ -268,14 +259,13 @@ export default function ProfileCard({ profile }: { profile: Profile }) {
           </div>
         </div>
 
-        {/* Premium Upsell for Free Users */}
         {isUserFree && !canViewContact && (
-          <div className="mt-4 p-3 bg-yellow-50 border-2 border-yellow-300 rounded-lg">
-            <p className="text-xs text-yellow-900 font-bold mb-1">
-              🔓 Unlock Full Profile
+          <div className="mt-4 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl">
+            <p className="text-xs text-yellow-900 font-bold mb-2">
+              🔓 Unlock All Features
             </p>
-            <p className="text-xs text-gray-700 mb-2">
-              Verify your NID (৳200) or upgrade to premium to unlock all features
+            <p className="text-xs text-gray-700 mb-3">
+              Verify your NID (৳200) or upgrade to premium
             </p>
             <div className="grid grid-cols-2 gap-2">
               <Link
