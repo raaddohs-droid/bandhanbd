@@ -228,7 +228,8 @@ export default function RegisterPage() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
+                  placeholder="Enter your full name"
                   required
                 />
               </div>
@@ -242,7 +243,8 @@ export default function RegisterPage() {
                     onChange={(e) => setAge(e.target.value)}
                     min="18"
                     max="80"
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
+                    placeholder="Age"
                     required
                   />
                 </div>
@@ -252,7 +254,8 @@ export default function RegisterPage() {
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
+                    placeholder="Your city"
                     required
                   />
                 </div>
@@ -263,7 +266,7 @@ export default function RegisterPage() {
                 <select
                   value={education}
                   onChange={(e) => setEducation(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900"
                   required
                 >
                   <option value="">Select Education</option>
@@ -282,7 +285,7 @@ export default function RegisterPage() {
                 <select
                   value={profession}
                   onChange={(e) => setProfession(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900"
                   required
                 >
                   <option value="">Select Profession</option>
@@ -337,7 +340,7 @@ export default function RegisterPage() {
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="01733577215"
                     maxLength={11}
-                    className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                    className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
                     required
                   />
                   <button
@@ -360,7 +363,7 @@ export default function RegisterPage() {
                       onChange={(e) => setOtp(e.target.value)}
                       placeholder="6-digit OTP"
                       maxLength={6}
-                      className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                      className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
                     />
                     <button
                       onClick={handleVerifyOtp}
@@ -384,7 +387,8 @@ export default function RegisterPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
+                  placeholder="your.email@example.com"
                   required
                 />
               </div>
@@ -396,7 +400,8 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   minLength={6}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-rose-500 focus:outline-none bg-white text-gray-900 placeholder-gray-400"
+                  placeholder="Minimum 6 characters"
                   required
                 />
               </div>
