@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import Script from 'next/script'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -12,6 +13,7 @@ export default function BiodataPage() {
   const id = params?.id as string
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -23,8 +25,38 @@ export default function BiodataPage() {
       .catch(() => setLoading(false))
   }, [id])
 
-  if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontSize: '20px' }}>Loading biodata...</div>
-  if (!profile) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontSize: '20px' }}>Profile not found</div>
+  const handleDownloadPDF = async () => {
+    setDownloading(true)
+    try {
+      const element = document.getElementById('biodata-content')
+      if (!element) return
+
+      // @ts-ignore
+      const html2pdf = (await import('html2pdf.js')).default
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: `biodata-${profile?.full_name?.replace(/\s+/g, '-') || id}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }
+      await html2pdf().set(opt).from(element).save()
+    } catch (err) {
+      alert('Download failed. Please use Print → Save as PDF instead.')
+    }
+    setDownloading(false)
+  }
+
+  if (loading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontSize: '20px', fontFamily: 'Arial' }}>
+      Loading biodata...
+    </div>
+  )
+  if (!profile) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontSize: '20px', fontFamily: 'Arial' }}>
+      Profile not found
+    </div>
+  )
 
   const has = (v: any) => v !== null && v !== undefined && String(v).trim() !== '' && String(v).toLowerCase() !== 'not specified'
   const showDegree = has(profile.degree) && profile.degree !== profile.education && !['SSC','HSC'].includes(profile.education)
@@ -33,12 +65,17 @@ export default function BiodataPage() {
     <>
       <style>{`
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; }
-        .page { max-width: 800px; margin: 0 auto; padding: 40px; }
-        .print-bar { background: #f3f0ff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #7c3aed; margin-bottom: 0; }
-        .print-btn { background: linear-gradient(135deg,#7c3aed,#ec4899); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+        body { font-family: Arial, sans-serif; background: #f5f3ff; color: #1a1a1a; }
+        .print-bar { background: #f3f0ff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #7c3aed; position: sticky; top: 0; z-index: 100; }
+        .bar-left { display: flex; align-items: center; gap: 8px; }
         .back-link { color: #7c3aed; font-weight: 700; text-decoration: none; font-size: 14px; }
-        .logo { text-align: center; margin-bottom: 16px; padding-top: 24px; }
+        .bar-right { display: flex; gap: 10px; }
+        .download-btn { background: linear-gradient(135deg,#7c3aed,#ec4899); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .download-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .print-btn { background: white; color: #7c3aed; border: 2px solid #7c3aed; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .wrapper { max-width: 860px; margin: 24px auto; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(124,58,237,0.1); overflow: hidden; }
+        .page { padding: 40px; }
+        .logo { text-align: center; margin-bottom: 20px; }
         .logo-brand { font-size: 16px; color: #7c3aed; font-weight: 900; letter-spacing: 3px; }
         .logo-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; }
         .header { background: linear-gradient(135deg,#7c3aed,#ec4899); color: white; padding: 24px; border-radius: 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 18px; }
@@ -55,174 +92,194 @@ export default function BiodataPage() {
         .lbl { color: #6b7280; font-size: 12px; }
         .val { font-weight: 600; font-size: 12px; color: #1f2937; text-align: right; }
         .text-block { font-size: 13px; line-height: 1.6; color: #374151; }
-        .footer { text-align: center; margin-top: 20px; padding: 12px; border-top: 2px solid #e5e7eb; }
+        .footer { text-align: center; margin-top: 20px; padding: 14px; border-top: 2px solid #e5e7eb; }
         .footer-brand { font-size: 13px; font-weight: 900; color: #7c3aed; }
         .footer p { font-size: 11px; color: #9ca3af; margin-top: 2px; }
         @media print {
           .print-bar { display: none !important; }
+          body { background: white; }
+          .wrapper { box-shadow: none; border-radius: 0; margin: 0; }
           body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        }
+        @media (max-width: 600px) {
+          .page { padding: 20px; }
+          .grid2 { grid-template-columns: 1fr; }
+          .bar-right { gap: 6px; }
+          .download-btn, .print-btn { padding: 8px 12px; font-size: 12px; }
         }
       `}</style>
 
+      {/* Top Bar */}
       <div className="print-bar">
-        <Link href={`/profile/${id}`} className="back-link">← Back to Profile</Link>
-        <button className="print-btn" onClick={() => window.print()}>📥 Save as PDF</button>
+        <div className="bar-left">
+          <Link href={`/profile/${id}`} className="back-link">← Back to Profile</Link>
+        </div>
+        <div className="bar-right">
+          <button className="download-btn" onClick={handleDownloadPDF} disabled={downloading}>
+            {downloading ? '⏳ Downloading...' : '⬇️ Download PDF'}
+          </button>
+          <button className="print-btn" onClick={() => window.print()}>
+            🖨️ Print
+          </button>
+        </div>
       </div>
 
-      <div className="page">
+      <div className="wrapper">
+        <div className="page" id="biodata-content">
 
-        <div className="logo">
-          <div className="logo-brand">✦ BIYEKORI.COM ✦</div>
-          <div className="logo-sub">Bangladesh's AI Matrimony Platform</div>
-        </div>
+          <div className="logo">
+            <div className="logo-brand">✦ BIYEKORI.COM ✦</div>
+            <div className="logo-sub">Bangladesh's AI Matrimony Platform</div>
+          </div>
 
-        <div className="header">
-          {profile.photo_url
-            ? <img src={profile.photo_url} alt={profile.full_name} className="photo" />
-            : <div className="photo-ph">{profile.gender === 'male' ? '👨' : '👩'}</div>
-          }
-          <div>
-            <h1>{profile.full_name || 'Anonymous'}</h1>
-            <div className="badges">
-              {has(profile.age) && <span className="badge">🎂 {profile.age} yrs</span>}
-              {has(profile.religion) && <span className="badge">🕌 {profile.religion}</span>}
-              {has(profile.city) && <span className="badge">📍 {profile.city}</span>}
-              {has(profile.profession) && <span className="badge">💼 {profile.profession}</span>}
-              {profile.nid_verified && <span className="badge">✓ Verified</span>}
+          <div className="header">
+            {profile.photo_url
+              ? <img src={profile.photo_url} alt={profile.full_name} className="photo" crossOrigin="anonymous" />
+              : <div className="photo-ph">{profile.gender === 'male' ? '👨' : '👩'}</div>
+            }
+            <div>
+              <h1>{profile.full_name || 'Anonymous'}</h1>
+              <div className="badges">
+                {has(profile.age) && <span className="badge">🎂 {profile.age} yrs</span>}
+                {has(profile.religion) && <span className="badge">🕌 {profile.religion}</span>}
+                {has(profile.city) && <span className="badge">📍 {profile.city}</span>}
+                {has(profile.profession) && <span className="badge">💼 {profile.profession}</span>}
+                {profile.nid_verified && <span className="badge">✓ Verified</span>}
+              </div>
             </div>
           </div>
-        </div>
 
-        {has(profile.about_me) && (
+          {has(profile.about_me) && (
+            <div className="section">
+              <h2>📝 About Me</h2>
+              <p className="text-block">{profile.about_me}</p>
+            </div>
+          )}
+
           <div className="section">
-            <h2>📝 About Me</h2>
-            <p className="text-block">{profile.about_me}</p>
-          </div>
-        )}
-
-        <div className="section">
-          <h2>👤 Personal Information</h2>
-          <div className="grid2">
-            <div>
-              {has(profile.age) && <div className="row"><span className="lbl">Age</span><span className="val">{profile.age} years</span></div>}
-              {has(profile.height) && <div className="row"><span className="lbl">Height</span><span className="val">{profile.height}</span></div>}
-              {has(profile.weight) && <div className="row"><span className="lbl">Weight</span><span className="val">{profile.weight} kg</span></div>}
-              {has(profile.blood_group) && <div className="row"><span className="lbl">Blood Group</span><span className="val">{profile.blood_group}</span></div>}
-              {has(profile.complexion) && <div className="row"><span className="lbl">Complexion</span><span className="val">{profile.complexion}</span></div>}
-            </div>
-            <div>
-              {has(profile.marital_status) && <div className="row"><span className="lbl">Marital Status</span><span className="val">{profile.marital_status}</span></div>}
-              {has(profile.religion) && <div className="row"><span className="lbl">Religion</span><span className="val">{profile.religion}</span></div>}
-              {has(profile.sect) && <div className="row"><span className="lbl">Sect</span><span className="val">{profile.sect}</span></div>}
-              {has(profile.body_type) && <div className="row"><span className="lbl">Body Type</span><span className="val">{profile.body_type}</span></div>}
-            </div>
-          </div>
-        </div>
-
-        <div className="section">
-          <h2>📍 Location</h2>
-          <div className="grid2">
-            <div>
-              {has(profile.city) && <div className="row"><span className="lbl">City</span><span className="val">{profile.city}</span></div>}
-              {has(profile.district) && <div className="row"><span className="lbl">District</span><span className="val">{profile.district}</span></div>}
-            </div>
-            <div>
-              {has(profile.country) && <div className="row"><span className="lbl">Country</span><span className="val">{profile.country}</span></div>}
-              <div className="row"><span className="lbl">Willing to Relocate</span><span className="val">{profile.willing_to_relocate ? 'Yes' : 'No'}</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="section">
-          <h2>🎓 Education & Career</h2>
-          <div className="grid2">
-            <div>
-              {has(profile.education) && <div className="row"><span className="lbl">Education</span><span className="val">{profile.education}</span></div>}
-              {showDegree && <div className="row"><span className="lbl">Degree</span><span className="val">{profile.degree}</span></div>}
-              {has(profile.institution) && <div className="row"><span className="lbl">Institution</span><span className="val">{profile.institution}</span></div>}
-            </div>
-            <div>
-              {has(profile.profession) && <div className="row"><span className="lbl">Profession</span><span className="val">{profile.profession}</span></div>}
-              {has(profile.monthly_income) && profile.monthly_income > 0 && <div className="row"><span className="lbl">Monthly Income</span><span className="val">৳{Number(profile.monthly_income).toLocaleString()}</span></div>}
-            </div>
-          </div>
-        </div>
-
-        <div className="section">
-          <h2>🕌 Religious Background</h2>
-          <div className="grid2">
-            <div>
-              {has(profile.religious_level) && <div className="row"><span className="lbl">Religious Level</span><span className="val">{profile.religious_level}</span></div>}
-              {has(profile.prayer_habit) && <div className="row"><span className="lbl">Prayer Habit</span><span className="val">{profile.prayer_habit}</span></div>}
-            </div>
-            <div>
-              {has(profile.diet) && <div className="row"><span className="lbl">Diet</span><span className="val">{profile.diet}</span></div>}
-              {profile.gender === 'female' && <div className="row"><span className="lbl">Wears Hijab</span><span className="val">{profile.wears_hijab ? 'Yes' : 'No'}</span></div>}
-            </div>
-          </div>
-        </div>
-
-        <div className="section">
-          <h2>👨‍👩‍👧‍👦 Family Background</h2>
-          <div className="grid2">
-            <div>
-              {has(profile.father_profession) && <div className="row"><span className="lbl">Father's Profession</span><span className="val">{profile.father_profession}</span></div>}
-              {has(profile.mother_profession) && <div className="row"><span className="lbl">Mother's Profession</span><span className="val">{profile.mother_profession}</span></div>}
-              {has(profile.total_siblings) && <div className="row"><span className="lbl">Total Siblings</span><span className="val">{profile.total_siblings}</span></div>}
-            </div>
-            <div>
-              {has(profile.family_type) && <div className="row"><span className="lbl">Family Type</span><span className="val">{profile.family_type}</span></div>}
-              {has(profile.family_values) && <div className="row"><span className="lbl">Family Values</span><span className="val">{profile.family_values}</span></div>}
-              {has(profile.family_status) && <div className="row"><span className="lbl">Family Status</span><span className="val">{profile.family_status}</span></div>}
-            </div>
-          </div>
-        </div>
-
-        {(has(profile.hobbies) || has(profile.personality_type)) && (
-          <div className="section">
-            <h2>🎨 Lifestyle & Personality</h2>
+            <h2>👤 Personal Information</h2>
             <div className="grid2">
               <div>
-                {has(profile.personality_type) && <div className="row"><span className="lbl">Personality</span><span className="val">{profile.personality_type}</span></div>}
-                <div className="row"><span className="lbl">Smoking</span><span className="val">{profile.smoking ? 'Yes' : 'No'}</span></div>
+                {has(profile.age) && <div className="row"><span className="lbl">Age</span><span className="val">{profile.age} years</span></div>}
+                {has(profile.height) && <div className="row"><span className="lbl">Height</span><span className="val">{profile.height}</span></div>}
+                {has(profile.weight) && <div className="row"><span className="lbl">Weight</span><span className="val">{profile.weight} kg</span></div>}
+                {has(profile.blood_group) && <div className="row"><span className="lbl">Blood Group</span><span className="val">{profile.blood_group}</span></div>}
+                {has(profile.complexion) && <div className="row"><span className="lbl">Complexion</span><span className="val">{profile.complexion}</span></div>}
               </div>
               <div>
-                <div className="row"><span className="lbl">Drinking</span><span className="val">{profile.drinking ? 'Yes' : 'No'}</span></div>
+                {has(profile.marital_status) && <div className="row"><span className="lbl">Marital Status</span><span className="val">{profile.marital_status}</span></div>}
+                {has(profile.religion) && <div className="row"><span className="lbl">Religion</span><span className="val">{profile.religion}</span></div>}
+                {has(profile.sect) && <div className="row"><span className="lbl">Sect</span><span className="val">{profile.sect}</span></div>}
+                {has(profile.body_type) && <div className="row"><span className="lbl">Body Type</span><span className="val">{profile.body_type}</span></div>}
               </div>
             </div>
-            {has(profile.hobbies) && <div style={{marginTop:'8px'}}><span className="lbl">Hobbies: </span><span style={{fontSize:'12px',fontWeight:600}}>{profile.hobbies}</span></div>}
           </div>
-        )}
 
-        {has(profile.expected_age_min) && (
           <div className="section">
-            <h2>💕 Partner Expectations</h2>
+            <h2>📍 Location</h2>
             <div className="grid2">
               <div>
-                <div className="row"><span className="lbl">Expected Age</span><span className="val">{profile.expected_age_min} - {profile.expected_age_max} yrs</span></div>
-                {has(profile.expected_education) && <div className="row"><span className="lbl">Education</span><span className="val">{profile.expected_education}</span></div>}
+                {has(profile.city) && <div className="row"><span className="lbl">City</span><span className="val">{profile.city}</span></div>}
+                {has(profile.district) && <div className="row"><span className="lbl">District</span><span className="val">{profile.district}</span></div>}
               </div>
               <div>
-                {has(profile.expected_religious_level) && <div className="row"><span className="lbl">Religious Level</span><span className="val">{profile.expected_religious_level}</span></div>}
-                {has(profile.expected_family_type) && <div className="row"><span className="lbl">Family Type</span><span className="val">{profile.expected_family_type}</span></div>}
+                {has(profile.country) && <div className="row"><span className="lbl">Country</span><span className="val">{profile.country}</span></div>}
+                <div className="row"><span className="lbl">Willing to Relocate</span><span className="val">{profile.willing_to_relocate ? 'Yes' : 'No'}</span></div>
               </div>
             </div>
-            {has(profile.partner_preference) && (
-              <div style={{marginTop:'8px'}}>
-                <div className="lbl" style={{marginBottom:'4px'}}>Partner Preference</div>
-                <p className="text-block">{profile.partner_preference}</p>
-              </div>
-            )}
           </div>
-        )}
 
-        <div className="footer">
-          <div className="footer-brand">BIYEKORI.COM</div>
-          <p>Bangladesh's AI-Powered Matrimony Platform • www.biyekori.com</p>
-          <p>Generated on {new Date().toLocaleDateString('en-BD')} • Profile ID: {profile.id}</p>
-          <p style={{marginTop:'4px',fontSize:'10px'}}>This document is confidential and intended for matrimonial purposes only.</p>
+          <div className="section">
+            <h2>🎓 Education & Career</h2>
+            <div className="grid2">
+              <div>
+                {has(profile.education) && <div className="row"><span className="lbl">Education</span><span className="val">{profile.education}</span></div>}
+                {showDegree && <div className="row"><span className="lbl">Degree</span><span className="val">{profile.degree}</span></div>}
+                {has(profile.institution) && <div className="row"><span className="lbl">Institution</span><span className="val">{profile.institution}</span></div>}
+              </div>
+              <div>
+                {has(profile.profession) && <div className="row"><span className="lbl">Profession</span><span className="val">{profile.profession}</span></div>}
+                {has(profile.monthly_income) && profile.monthly_income > 0 && <div className="row"><span className="lbl">Monthly Income</span><span className="val">৳{Number(profile.monthly_income).toLocaleString()}</span></div>}
+              </div>
+            </div>
+          </div>
+
+          <div className="section">
+            <h2>🕌 Religious Background</h2>
+            <div className="grid2">
+              <div>
+                {has(profile.religious_level) && <div className="row"><span className="lbl">Religious Level</span><span className="val">{profile.religious_level}</span></div>}
+                {has(profile.prayer_habit) && <div className="row"><span className="lbl">Prayer Habit</span><span className="val">{profile.prayer_habit}</span></div>}
+              </div>
+              <div>
+                {has(profile.diet) && <div className="row"><span className="lbl">Diet</span><span className="val">{profile.diet}</span></div>}
+                {profile.gender === 'female' && <div className="row"><span className="lbl">Wears Hijab</span><span className="val">{profile.wears_hijab ? 'Yes' : 'No'}</span></div>}
+              </div>
+            </div>
+          </div>
+
+          <div className="section">
+            <h2>👨‍👩‍👧‍👦 Family Background</h2>
+            <div className="grid2">
+              <div>
+                {has(profile.father_profession) && <div className="row"><span className="lbl">Father's Profession</span><span className="val">{profile.father_profession}</span></div>}
+                {has(profile.mother_profession) && <div className="row"><span className="lbl">Mother's Profession</span><span className="val">{profile.mother_profession}</span></div>}
+                {has(profile.total_siblings) && <div className="row"><span className="lbl">Total Siblings</span><span className="val">{profile.total_siblings}</span></div>}
+              </div>
+              <div>
+                {has(profile.family_type) && <div className="row"><span className="lbl">Family Type</span><span className="val">{profile.family_type}</span></div>}
+                {has(profile.family_values) && <div className="row"><span className="lbl">Family Values</span><span className="val">{profile.family_values}</span></div>}
+                {has(profile.family_status) && <div className="row"><span className="lbl">Family Status</span><span className="val">{profile.family_status}</span></div>}
+              </div>
+            </div>
+          </div>
+
+          {(has(profile.hobbies) || has(profile.personality_type)) && (
+            <div className="section">
+              <h2>🎨 Lifestyle & Personality</h2>
+              <div className="grid2">
+                <div>
+                  {has(profile.personality_type) && <div className="row"><span className="lbl">Personality</span><span className="val">{profile.personality_type}</span></div>}
+                  <div className="row"><span className="lbl">Smoking</span><span className="val">{profile.smoking ? 'Yes' : 'No'}</span></div>
+                </div>
+                <div>
+                  <div className="row"><span className="lbl">Drinking</span><span className="val">{profile.drinking ? 'Yes' : 'No'}</span></div>
+                </div>
+              </div>
+              {has(profile.hobbies) && <div style={{marginTop:'8px'}}><span className="lbl">Hobbies: </span><span style={{fontSize:'12px',fontWeight:600}}>{profile.hobbies}</span></div>}
+            </div>
+          )}
+
+          {has(profile.expected_age_min) && (
+            <div className="section">
+              <h2>💕 Partner Expectations</h2>
+              <div className="grid2">
+                <div>
+                  <div className="row"><span className="lbl">Expected Age</span><span className="val">{profile.expected_age_min} - {profile.expected_age_max} yrs</span></div>
+                  {has(profile.expected_education) && <div className="row"><span className="lbl">Education</span><span className="val">{profile.expected_education}</span></div>}
+                </div>
+                <div>
+                  {has(profile.expected_religious_level) && <div className="row"><span className="lbl">Religious Level</span><span className="val">{profile.expected_religious_level}</span></div>}
+                  {has(profile.expected_family_type) && <div className="row"><span className="lbl">Family Type</span><span className="val">{profile.expected_family_type}</span></div>}
+                </div>
+              </div>
+              {has(profile.partner_preference) && (
+                <div style={{marginTop:'8px'}}>
+                  <div className="lbl" style={{marginBottom:'4px'}}>Partner Preference</div>
+                  <p className="text-block">{profile.partner_preference}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="footer">
+            <div className="footer-brand">BIYEKORI.COM</div>
+            <p>Bangladesh's AI-Powered Matrimony Platform • www.biyekori.com</p>
+            <p>Generated on {new Date().toLocaleDateString('en-BD')} • Profile ID: {profile.id}</p>
+            <p style={{marginTop:'4px',fontSize:'10px'}}>This document is confidential and intended for matrimonial purposes only.</p>
+          </div>
+
         </div>
-
       </div>
     </>
   )
