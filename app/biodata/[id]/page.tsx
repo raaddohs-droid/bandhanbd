@@ -38,7 +38,7 @@ export default function BiodataPage() {
         filename: `biodata-${profile?.full_name?.replace(/\s+/g, '-') || id}.pdf`,
         image: { type: 'jpeg' as 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, allowTaint: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as 'portrait' }
       }
       await html2pdf().set(opt).from(element).save()
     } catch (err) {
