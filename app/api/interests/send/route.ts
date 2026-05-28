@@ -1,7 +1,7 @@
 ﻿import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-export async function POST(req) {
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+export async function POST(req: Request) {
   try {
     const { senderId, receiverId } = await req.json();
     if (!senderId || !receiverId) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -22,5 +22,8 @@ export async function POST(req) {
       await supabase.from("notifications").insert([{ user_id: receiverId, type: "interest_received", message: senderProfile?.full_name + " আপনাকে interest পাঠিয়েছেন!", profile_id: senderId, is_read: false }]);
     }
     return NextResponse.json({ success: true, interestId: data.id });
-  } catch (err) { return NextResponse.json({ error: err.message }, { status: 500 }); }
+  } catch (err: any) { return NextResponse.json({ error: err.message }, { status: 500 }); }
 }
+
+
+

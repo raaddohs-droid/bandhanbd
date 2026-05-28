@@ -15,7 +15,7 @@ export default function InterestsPage() {
     else setLoading(false)
   }, [])
 
-  async function fetchInterests(uid) {
+  async function fetchInterests(uid: string) {
     setLoading(true)
     try {
       const res = await fetch("/api/interests/list?userId=" + uid)
@@ -26,7 +26,7 @@ export default function InterestsPage() {
     setLoading(false)
   }
 
-  async function respond(interestId, action) {
+  async function respond(interestId: number, action: string) {
     const res = await fetch("/api/interests/respond", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -98,3 +98,5 @@ export default function InterestsPage() {
     </div>
   )
 }
+
+
