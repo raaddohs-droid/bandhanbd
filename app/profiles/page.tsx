@@ -156,15 +156,15 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
             {/* Results Header */}
             <div className="bg-white rounded-2xl shadow-sm p-5 mb-6">
               <p className="text-xl font-black text-gray-900">
-                {totalFilteredProfiles} Profiles Found
+                Profiles for You
                 {isFreeTier && hiddenProfilesCount > 0 && (
                   <span className="text-sm font-normal text-orange-600 ml-2">
-                    (+{hiddenProfilesCount} more with Premium)
+                    
                   </span>
                 )}
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                Page {currentPage} of {totalPages}
+                
               </p>
             </div>
 
@@ -261,4 +261,5 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
     </div>
   )
 }
+
 

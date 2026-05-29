@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AIPhotoCropper from '@/components/profiles/AIPhotoCropper';
@@ -78,9 +78,9 @@ export default function RegisterPage() {
   const handleVerifyOtp = () => {
     if (otp === sentOtp) {
       setOtpVerified(true);
-      alert('âœ… Phone verified successfully!');
+      alert('… Phone verified successfully!');
     } else {
-      alert('âŒ Invalid OTP. Please try again.');
+      alert(' Invalid OTP. Please try again.');
     }
   };
 
@@ -152,7 +152,7 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (data.success) {
-        alert('ðŸŽ‰ Registration successful! Please login.');
+        alert('‰ Registration successful! Please login.');
         router.push('/login');
       } else {
         alert(data.error || 'Registration failed');
@@ -199,7 +199,7 @@ export default function RegisterPage() {
             {/* Main Photo */}
             <div className="mb-6">
               <label className="block text-sm font-bold text-gray-900 mb-3">
-                ðŸ“· Main Photo (Profile Picture)
+                “ Main Photo (Profile Picture)
               </label>
               <AIPhotoCropper 
                 onPhotoSelect={handlePhotoSelect}
@@ -210,10 +210,10 @@ export default function RegisterPage() {
             {/* Additional Photos */}
             <div className="mb-6">
               <label className="block text-sm font-bold text-gray-900 mb-3">
-                ðŸ“¸ Additional Photos (Optional, 2-5 photos)
+                “ Additional Photos (Optional, 2-5 photos)
               </label>
               <p className="text-xs text-gray-600 mb-3">
-                âœ¨ Add full-body shots, family photos, or hobby photos to get 5x more responses!
+                 Add full-body shots, family photos, or hobby photos to get 5x more responses!
               </p>
               
               {/* Photo Grid */}
@@ -229,7 +229,7 @@ export default function RegisterPage() {
                       onClick={() => removeAdditionalPhoto(index)}
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold hover:bg-red-600"
                     >
-                      âœ•
+                      •
                     </button>
                   </div>
                 ))}
@@ -258,7 +258,7 @@ export default function RegisterPage() {
             {/* Looking For */}
             <div className="mb-6">
               <label className="block text-sm font-bold text-gray-900 mb-3">
-                à¦†à¦ªà¦¨à¦¿ à¦–à§à¦à¦œà¦›à§‡à¦¨ / You are looking for:
+                † –›‡ / You are looking for:
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <button
@@ -269,7 +269,7 @@ export default function RegisterPage() {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  à¦ªà¦¾à¦¤à§à¦°à§€ (Bride)
+                   (Bride)
                 </button>
                 <button
                   onClick={() => setLookingFor('groom')}
@@ -279,7 +279,7 @@ export default function RegisterPage() {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  à¦ªà¦¾à¦¤à§à¦° (Groom)
+                   (Groom)
                 </button>
               </div>
             </div>
@@ -293,7 +293,7 @@ export default function RegisterPage() {
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              Next â†’
+              Next †’
             </button>
           </div>
         )}
@@ -390,7 +390,7 @@ export default function RegisterPage() {
                 onClick={() => setStep(1)}
                 className="flex-1 py-4 bg-gray-100 text-gray-900 rounded-xl font-bold hover:bg-gray-200"
               >
-                â† Back
+                † Back
               </button>
               <button
                 onClick={() => setStep(3)}
@@ -401,7 +401,7 @@ export default function RegisterPage() {
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Next â†’
+                Next †’
               </button>
             </div>
           </div>
@@ -459,7 +459,7 @@ export default function RegisterPage() {
 
               {otpVerified && (
                 <div className="p-4 bg-green-50 border-2 border-green-500 rounded-xl">
-                  <p className="text-green-900 font-bold">âœ… Phone verified!</p>
+                  <p className="text-green-900 font-bold">… Phone verified!</p>
                 </div>
               )}
 
@@ -494,7 +494,7 @@ export default function RegisterPage() {
                 onClick={() => setStep(2)}
                 className="flex-1 py-4 bg-gray-100 text-gray-900 rounded-xl font-bold hover:bg-gray-200"
               >
-                â† Back
+                † Back
               </button>
               <button
                 onClick={handleSubmit}

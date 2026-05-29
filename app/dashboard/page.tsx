@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -47,7 +47,7 @@ export default function Dashboard() {
   const handleShowViewers = async () => {
     const isPremium = user?.package && user.package !== 'prottasha';
     if (!isPremium) {
-      alert('👑 Who Viewed Me is a Premium feature!\n\nUpgrade to Bondhon or Milon plan to see who viewed your profile.');
+      alert('ðŸ‘‘ Who Viewed Me is a Premium feature!\n\nUpgrade to Bondhon or Milon plan to see who viewed your profile.');
       return;
     }
     setLoadingViewers(true);
@@ -63,13 +63,13 @@ export default function Dashboard() {
   };
 
   if (!user) {
-    return <div className="min-h-screen flex items-center justify-center"><div className="text-xl">Loading...</div></div>;
+    return <div className="pt-16 min-h-screen flex items-center justify-center"><div className="text-xl">Loading...</div></div>;
   }
 
   const isPremium = user?.package && user.package !== 'prottasha';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+    <div className="pt-16 min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -92,14 +92,14 @@ export default function Dashboard() {
               <div className="bg-gradient-to-r from-yellow-100 via-orange-100 to-red-100 border-4 border-yellow-400 rounded-2xl p-6 mb-6 shadow-xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-black text-gray-900 mb-2">🔒 Get Verified Badge - Stand Out!</h2>
-                    <p className="text-gray-700 mb-2">✓ 5x more profile views | ✓ Top search results | ✓ Build trust</p>
+                    <h2 className="text-2xl font-black text-gray-900 mb-2">ðŸ”’ Get Verified Badge - Stand Out!</h2>
+                    <p className="text-gray-700 mb-2">âœ“ 5x more profile views | âœ“ Top search results | âœ“ Build trust</p>
                     <p className="text-sm text-gray-600">Verified profiles get 80% more responses!</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-black text-rose-600 mb-2">৳200</div>
+                    <div className="text-4xl font-black text-rose-600 mb-2">à§³200</div>
                     <p className="text-xs text-gray-600 mb-3">One-time fee</p>
-                    <Link href="/verify" className="inline-block px-8 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-xl font-bold hover:shadow-2xl transition">Verify My NID →</Link>
+                    <Link href="/verify" className="inline-block px-8 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-xl font-bold hover:shadow-2xl transition">Verify My NID â†’</Link>
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@ export default function Dashboard() {
             {user.is_verified && (
               <div className="bg-gradient-to-r from-green-100 to-emerald-100 border-4 border-green-400 rounded-2xl p-6 mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="text-6xl">✅</div>
+                  <div className="text-6xl">âœ…</div>
                   <div>
                     <h2 className="text-2xl font-black text-green-900">Your Profile is Verified!</h2>
                     <p className="text-green-700 mt-1">You have the trusted verified badge on your profile</p>
@@ -117,11 +117,11 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* ─── WHO VIEWED ME CARD ─── */}
+            {/* â”€â”€â”€ WHO VIEWED ME CARD â”€â”€â”€ */}
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">👁️</div>
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">ðŸ‘ï¸</div>
                   <div>
                     <h2 className="text-xl font-black text-gray-900">Who Viewed My Profile</h2>
                     <p className="text-gray-500 text-sm">People who visited your profile</p>
@@ -137,11 +137,11 @@ export default function Dashboard() {
                 <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-gray-800 mb-1">🔒 Premium Feature</p>
+                      <p className="font-bold text-gray-800 mb-1">ðŸ”’ Premium Feature</p>
                       <p className="text-sm text-gray-600">Upgrade to see exactly who viewed your profile</p>
                     </div>
                     <Link href="/pricing" className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-sm hover:shadow-lg transition whitespace-nowrap">
-                      Upgrade ৳799/mo
+                      Upgrade à§³799/mo
                     </Link>
                   </div>
 
@@ -157,7 +157,7 @@ export default function Dashboard() {
                         <div className="ml-auto w-12 h-2 bg-gray-100 rounded"></div>
                       </div>
                     ))}
-                    <p className="text-center text-xs text-purple-600 font-bold mt-2">🔒 Unlock to see real viewers</p>
+                    <p className="text-center text-xs text-purple-600 font-bold mt-2">ðŸ”’ Unlock to see real viewers</p>
                   </div>
                 </div>
               ) : (
@@ -166,7 +166,7 @@ export default function Dashboard() {
                     onClick={handleShowViewers}
                     className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:shadow-lg transition mb-4"
                   >
-                    👁️ See Who Viewed Me ({viewCount} views)
+                    ðŸ‘ï¸ See Who Viewed Me ({viewCount} views)
                   </button>
 
                   {showViewers && (
@@ -175,7 +175,7 @@ export default function Dashboard() {
                         <div className="text-center py-8 text-gray-500">Loading viewers...</div>
                       ) : viewers.length === 0 ? (
                         <div className="text-center py-8">
-                          <div className="text-4xl mb-2">👀</div>
+                          <div className="text-4xl mb-2">ðŸ‘€</div>
                           <p className="text-gray-500">No views yet. Share your profile to get more visibility!</p>
                         </div>
                       ) : (
@@ -183,7 +183,7 @@ export default function Dashboard() {
                           const viewer = view.viewer;
                           if (!viewer) return (
                             <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl">👤</div>
+                              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl">ðŸ‘¤</div>
                               <div className="flex-1">
                                 <p className="font-bold text-gray-700">Anonymous Visitor</p>
                                 <p className="text-xs text-gray-500">{new Date(view.viewed_at).toLocaleDateString('en-BD')}</p>
@@ -196,16 +196,16 @@ export default function Dashboard() {
                                 <img src={viewer.photo_url} alt={viewer.full_name} className="w-12 h-12 rounded-full object-cover border-2 border-purple-200" />
                               ) : (
                                 <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-xl">
-                                  {viewer.gender === 'male' ? '👨' : '👩'}
+                                  {viewer.gender === 'male' ? 'ðŸ‘¨' : 'ðŸ‘©'}
                                 </div>
                               )}
                               <div className="flex-1">
                                 <p className="font-bold text-gray-900">{viewer.full_name || 'Anonymous'}</p>
-                                <p className="text-xs text-gray-500">{viewer.age} yrs • {viewer.city} • {viewer.profession}</p>
+                                <p className="text-xs text-gray-500">{viewer.age} yrs â€¢ {viewer.city} â€¢ {viewer.profession}</p>
                               </div>
                               <div className="text-right">
                                 <p className="text-xs text-gray-400">{new Date(view.viewed_at).toLocaleDateString('en-BD')}</p>
-                                <p className="text-xs text-purple-600 font-bold mt-1">View Profile →</p>
+                                <p className="text-xs text-purple-600 font-bold mt-1">View Profile â†’</p>
                               </div>
                             </Link>
                           );
@@ -220,17 +220,17 @@ export default function Dashboard() {
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <Link href="/profiles" className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition transform hover:scale-105">
-                <div className="text-4xl mb-3">🔍</div>
+                <div className="text-4xl mb-3">ðŸ”</div>
                 <h3 className="text-xl font-black text-gray-900 mb-2">Browse Profiles</h3>
                 <p className="text-gray-600 text-sm">Find your perfect match</p>
               </Link>
               <Link href="/verify" className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition transform hover:scale-105">
-                <div className="text-4xl mb-3">✓</div>
+                <div className="text-4xl mb-3">âœ“</div>
                 <h3 className="text-xl font-black text-gray-900 mb-2">Verify NID</h3>
                 <p className="text-gray-600 text-sm">Get verified badge</p>
               </Link>
               <Link href="/pricing" className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition transform hover:scale-105 cursor-pointer">
-                <div className="text-4xl mb-3">⭐</div>
+                <div className="text-4xl mb-3">â­</div>
                 <h3 className="text-xl font-black text-gray-900 mb-2">Upgrade Plan</h3>
                 <p className="text-gray-600 text-sm">Unlock premium features</p>
               </Link>
@@ -250,7 +250,7 @@ export default function Dashboard() {
                 </div>
                 <div className="text-center p-4 bg-purple-50 rounded-xl cursor-pointer hover:bg-purple-100 transition" onClick={handleShowViewers}>
                   <div className="text-3xl font-black text-purple-600">{viewCount}</div>
-                  <p className="text-sm text-gray-600 mt-1">Profile Views {!isPremium && '🔒'}</p>
+                  <p className="text-sm text-gray-600 mt-1">Profile Views {!isPremium && 'ðŸ”’'}</p>
                 </div>
                 <div className="text-center p-4 bg-yellow-50 rounded-xl">
                   <div className="text-2xl font-black text-yellow-600">{user.package || 'Free'}</div>
@@ -271,3 +271,4 @@ export default function Dashboard() {
     </div>
   );
 }
+
