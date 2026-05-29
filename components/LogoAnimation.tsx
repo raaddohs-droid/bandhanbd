@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
 
@@ -55,7 +55,7 @@ export default function LogoAnimation() {
     const gap  = R * 0.52;
     const FAR  = W * 0.46;
 
-    // on very first frame — fill solid dark so trail has a base
+    // on very first frame â€” fill solid dark so trail has a base
     if (!initializedRef.current) {
       ctx.fillStyle = '#080604';
       ctx.fillRect(0, 0, W, H);
@@ -104,13 +104,13 @@ export default function LogoAnimation() {
       rx = cx + gap + (1 - e) * FAR;
       spin = (1 - e) * Math.PI * 8;
 
-      // ── TRAIL: paint semi-transparent dark over whole canvas
+      // â”€â”€ TRAIL: paint semi-transparent dark over whole canvas
       // this dims everything by a tiny amount each frame
       // old ring positions fade to dark slowly = visible gold trail
       ctx.fillStyle = 'rgba(8, 6, 4, 0.04)';
       ctx.fillRect(0, 0, W, H);
 
-      // both rings spin same direction — like coins rolling on a table
+      // both rings spin same direction â€” like coins rolling on a table
       ring(rx, cy, true,   spin, 1);
       ring(lx, cy, false,  spin, 1);
 
@@ -157,7 +157,7 @@ export default function LogoAnimation() {
         ctx.beginPath(); ctx.arc(cx, cy, 60, 0, Math.PI * 2); ctx.fill();
       }
 
-      // interlocked rings — proper clip order
+      // interlocked rings â€” proper clip order
       ctx.save();
       ctx.beginPath(); ctx.rect(0, 0, W, H);
       ctx.arc(rx, cy, R + band / 2 + 2, 0, Math.PI * 2, true);
@@ -214,7 +214,7 @@ export default function LogoAnimation() {
         ref={canvasRef}
         style={{ width: '100%', maxWidth: '640px', height: '180px', display: 'block' }}
         role="img"
-        aria-label="Biyekori — two gold rings rolling together"
+        aria-label="Biyekori â€” two gold rings rolling together"
       />
       <div ref={wordmarkRef} style={{
         fontFamily: 'Georgia, serif',
@@ -228,3 +228,4 @@ export default function LogoAnimation() {
     </div>
   );
 }
+

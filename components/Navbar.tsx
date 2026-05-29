@@ -186,10 +186,10 @@ export default function Navbar() {
                   {/* Menu items */}
                   <div style={{ padding: '8px 0' }}>
                     {[
-                      { href: '/dashboard', icon: 'ðŸ“Š', label: 'Dashboard' },
-                      { href: '/interests', icon: 'ðŸ’Œ', label: 'My Interests' },
-                      { href: '/profiles', icon: 'ðŸ”', label: 'Browse Profiles' },
-                      { href: '/pricing', icon: 'â­', label: 'Plans & Pricing' },
+                      { href: '/dashboard', icon: '', label: 'Dashboard' },
+                      { href: '/interests', icon: '', label: 'My Interests' },
+                      { href: '/profiles', icon: '', label: 'Browse Profiles' },
+                      { href: '/pricing', icon: '', label: 'Plans & Pricing' },
                     ].map(({ href, icon, label }) => (
                       <Link key={href} href={href} onClick={() => setShowMenu(false)}
                         style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', fontSize: '13px', color: '#374151', textDecoration: 'none', fontFamily: 'Georgia, serif' }}
