@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 
 export default function InterestsPage() {
-  const [tab, setTab] = useState("received")
+  const [tab, setTab] = useState("sent")
   const [received, setReceived] = useState<any[]>([])
   const [sent, setSent] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -76,7 +76,7 @@ export default function InterestsPage() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-gray-900 truncate">{person.full_name}</h3>
                     <p className="text-sm text-gray-500">{person.age} yrs · {person.district} · {person.profession}</p>
-                    <p className="text-xs text-gray-400 mt-1">{new Date(interest.sent_at).toLocaleDateString("en-BD")}</p>
+                    <p className="text-xs text-gray-400 mt-1">{new Date(interest.created_at || interest.sent_at).toLocaleDateString("en-GB")}</p>
                   </div>
                   <div className="flex flex-col items-end gap-2 flex-shrink-0">
                     {statusBadge(interest.status)}
