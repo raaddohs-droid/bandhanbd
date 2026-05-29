@@ -10,13 +10,13 @@ export async function GET(req: Request) {
 
     const { data: sent } = await supabase
       .from("interests")
-      .select("*")
+      .select("*, receiver:profiles!receiver_id(id, full_name, photo_url, age, district, profession)")
       .eq("sender_id", parseInt(userId))
       .order("created_at", { ascending: false });
 
     const { data: received } = await supabase
       .from("interests")
-      .select("*")
+      .select("*, sender:profiles!sender_id(id, full_name, photo_url, age, district, profession)")
       .eq("receiver_id", parseInt(userId))
       .order("created_at", { ascending: false });
 
