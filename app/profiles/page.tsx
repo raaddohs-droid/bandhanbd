@@ -177,7 +177,7 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
                       🎉 Unlock {hiddenProfilesCount}+ More Profiles!
                     </p>
                     <p className="text-sm text-gray-700 mb-3">
-                      You are viewing limited profiles. Upgrade to see everyone who matches your preferences!
+                      You are seeing a small selection. Upgrade to discover thousands of verified matches across Bangladesh.
                     </p>
                     <ul className="text-sm text-gray-800 space-y-1 mb-4">
                       <li>✅ See all {filteredProfiles.length} matching profiles</li>
