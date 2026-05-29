@@ -8,20 +8,17 @@ export async function GET(req: Request) {
     const userId = searchParams.get("userId");
     if (!userId) return NextResponse.json({ error: "Missing userId" }, { status: 400 });
 
-    const { data: sent, error: sentError } = await supabase
+    const { data: sent } = await supabase
       .from("interests")
       .select("*")
       .eq("sender_id", parseInt(userId))
-      .order("sent_at", { ascending: false });
+      .order("created_at", { ascending: false });
 
-    const { data: received, error: recError } = await supabase
+    const { data: received } = await supabase
       .from("interests")
       .select("*")
       .eq("receiver_id", parseInt(userId))
-      .order("sent_at", { ascending: false });
-
-    if (sentError) console.error("sent error:", sentError);
-    if (recError) console.error("rec error:", recError);
+      .order("created_at", { ascending: false });
 
     return NextResponse.json({ received: received || [], sent: sent || [] });
   } catch (err: any) {
