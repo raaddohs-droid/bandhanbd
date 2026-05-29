@@ -98,7 +98,7 @@ export default function LogoAnimation() {
     const phase = phaseRef.current;
 
     if (phase === 'roll') {
-      const t = Math.min(elapsed / 16000, 1);
+      const t = Math.min(elapsed / 4000, 1);
       const e = easeOutQuint(t);
       lx = cx - gap - (1 - e) * FAR;
       rx = cx + gap + (1 - e) * FAR;
@@ -228,4 +228,5 @@ export default function LogoAnimation() {
     </div>
   );
 }
+
 
