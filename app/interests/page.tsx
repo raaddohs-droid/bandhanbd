@@ -12,7 +12,6 @@ export default function InterestsPage() {
   useEffect(() => {
     let stored = null; try { const userStr = localStorage.getItem("biyekori_user"); const parsed = userStr ? JSON.parse(userStr) : null; stored = parsed ? String(parsed.id) : null; } catch(e) {}
     if (stored) { setUserId(stored); fetchInterests(stored) } else { setLoading(false) }
-    else setLoading(false)
   }, [])
 
   async function fetchInterests(uid: string) {
