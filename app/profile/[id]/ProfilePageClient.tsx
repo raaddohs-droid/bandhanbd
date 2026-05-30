@@ -128,7 +128,7 @@ function getPredLabel(s: number) {
 
 // ─── MODAL ────────────────────────────────────────────────────
 
-function ScoreModal({ profile, onClose }: { profile: any, onClose: () => void }) {
+function ScoreModal({ profile, onClose, isLoggedIn }: { profile: any, onClose: () => void, isLoggedIn: boolean }) {
   const { matchScore, predictability, breakdown, predBreakdown } = calculateScores(profile)
   const [tab, setTab] = useState<'match' | 'predict'>('match')
 
@@ -160,9 +160,11 @@ function ScoreModal({ profile, onClose }: { profile: any, onClose: () => void })
         <div className="p-6">
           {tab === 'match' && (
             <>
+              {!isLoggedIn && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4 text-sm text-blue-800">
-                ℹ️ Score based on <strong>general preferences</strong>. <Link href="/login" className="text-blue-600 font-bold underline">Log in</Link> for your personal match score!
+                Score based on general preferences. <Link href="/login" className="text-blue-600 font-bold underline">Log in</Link> for your personal match score!
               </div>
+              )}
               <h3 className="font-bold text-gray-800 mb-3">Match Score Breakdown</h3>
               <div className="space-y-3">
                 {breakdown.map((item: any, i: number) => (
@@ -209,12 +211,14 @@ function ScoreModal({ profile, onClose }: { profile: any, onClose: () => void })
             </>
           )}
 
+          {!isLoggedIn && (
           <div className="mt-6 pt-4 border-t border-gray-100 text-center">
             <p className="text-xs text-gray-500 mb-3">Want YOUR match score with this person?</p>
             <Link href="/login" className="block w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl text-sm hover:shadow-lg transition">
-              🔑 Log In for Personal Match Score
+              Log In for Personal Match Score
             </Link>
           </div>
+          )}
         </div>
       </div>
     </div>
@@ -225,10 +229,13 @@ function ScoreModal({ profile, onClose }: { profile: any, onClose: () => void })
 
 export default function ProfilePageClient({ profile }: { profile: any }) {
   const [showModal, setShowModal] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { matchScore, predictability } = calculateScores(profile)
 
   useEffect(() => {
     if (profile?.id) recordView(String(profile.id));
+    const userData = localStorage.getItem('biyekori_user');
+    setIsLoggedIn(!!userData);
   }, [profile?.id])
 
   const matchCircle = 2 * Math.PI * 54
@@ -300,11 +307,11 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
             >
               🔍 Why this score? Tap to understand
             </button>
-            <p className="text-purple-200 text-xs mt-2">Score is based on general preferences • Log in for your personal match score</p>
+            {!isLoggedIn && <p className="text-purple-200 text-xs mt-2">Score is based on general preferences • Log in for your personal match score</p>}
           </div>
         </div>
 
-        {showModal && <ScoreModal profile={profile} onClose={() => setShowModal(false)} />}
+        {showModal && <ScoreModal profile={profile} onClose={() => setShowModal(false)} isLoggedIn={isLoggedIn} />}
 
         {/* Header Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6">
