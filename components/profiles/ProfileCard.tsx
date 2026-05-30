@@ -96,7 +96,7 @@ export default function ProfileCard({ profile, currentUserPackage = "prottasha",
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
+    <div className={"bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden " + (isPremium ? "border-2 border-yellow-400" : "border border-gray-100")}>
       <div className="relative h-64 bg-gradient-to-br from-rose-100 to-purple-100">
         {allPhotos.length > 0 ? (
           <img src={allPhotos[currentPhotoIndex]} alt={name} className="w-full h-full object-cover" />
@@ -114,10 +114,7 @@ export default function ProfileCard({ profile, currentUserPackage = "prottasha",
         {isVerified && (
           <div className="absolute top-3 left-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">Verified</div>
         )}
-        {isPremium && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-2 py-1 rounded-full text-xs font-bold">Premium</div>
-        )}
-        {!isPremium && (() => {
+        {(() => {
           const score = getQuickScore(profile)
           return (
             <div style={{
@@ -148,7 +145,14 @@ export default function ProfileCard({ profile, currentUserPackage = "prottasha",
       <div className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div>
-            <h3 className="text-lg font-black text-gray-900">{name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-black text-gray-900">{name}</h3>
+              {isPremium && (
+                <span style={{ fontSize: '10px', fontWeight: 700, color: '#b45309', background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: '6px', padding: '2px 6px', letterSpacing: '0.3px' }}>
+                  Premium
+                </span>
+              )}
+            </div>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
               <span className="text-sm text-gray-600">{profile.age} yrs</span>
               {profile.height && <span className="text-sm text-gray-600">· {profile.height}</span>}
