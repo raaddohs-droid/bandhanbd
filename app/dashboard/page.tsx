@@ -69,7 +69,7 @@ export default function Dashboard() {
   const isPremium = user?.package && user.package !== 'prottasha';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50" style={{paddingTop:"70px"}}>
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
