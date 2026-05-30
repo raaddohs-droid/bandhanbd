@@ -246,7 +246,7 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
       fetch(`/api/interests/list?userId=${user.id}`)
         .then(r => r.json())
         .then(data => {
-          if (data.sent && data.sent.some((s: any) => String(s.target_id) === String(profile.id))) {
+          if (data.sent && data.sent.some((s: any) => String(s.receiver_id) === String(profile.id))) {
             setInterestSent(true);
           }
         })
@@ -268,7 +268,7 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
       const res = await fetch('/api/interests/send', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ senderId: user.id, targetId: profile.id })
+        body: JSON.stringify({ senderId: user.id, receiverId: profile.id })
       });
       const data = await res.json();
       if (data.success) { setInterestSent(true); showMsg('Interest sent successfully!', 'success'); }
@@ -298,7 +298,7 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
     try {
       const res = await fetch(`/api/interests/list?userId=${user.id}`);
       const data = await res.json();
-      const match = data.sent?.find((s: any) => String(s.target_id) === String(profile.id));
+      const match = data.sent?.find((s: any) => String(s.receiver_id) === String(profile.id));
       if (match && match.status === 'accepted') {
         // Mutual — upgrade prompt
         showMsg('Your interest was accepted! Upgrade to start messaging.', 'upgrade');
@@ -317,10 +317,17 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
   }
 
   const handleShareWhatsApp = () => {
-    const url = encodeURIComponent(`https://biyekori.com/profile/${profile.id}`);
-    const name = profile.full_name || 'this profile';
-    const msg = encodeURIComponent(`Ei profile ta dekho — ${name} — biyekori.com te: https://biyekori.com/profile/${profile.id}`);
-    window.open(`https://wa.me/?text=${msg}`, '_blank');
+    const name = profile.full_name || 'Profile';
+    const profileUrl = 'https://biyekori.com/profile/' + profile.id;
+    const msg = 'Ei profile ta dekho Biye Kori te: ' + profileUrl;
+    const waUrl = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    const a = document.createElement('a');
+    a.href = waUrl;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   const matchCircle = 2 * Math.PI * 54
