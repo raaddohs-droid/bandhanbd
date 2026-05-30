@@ -1,4 +1,5 @@
 import UpgradeNudge from '@/components/UpgradeNudge'
+import AdvancedSearch from '@/components/profiles/AdvancedSearch'
 import { getProfiles } from '@/lib/supabase-server'
 import ProfileCard from '@/components/profiles/ProfileCard'
 import Link from 'next/link'
@@ -38,6 +39,13 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
   const minAge = typeof params.minAge === 'string' ? parseInt(params.minAge) || 18 : 18
   const maxAge = typeof params.maxAge === 'string' ? parseInt(params.maxAge) || 70 : 70
   const maritalFilter = typeof params.marital === 'string' ? params.marital : ''
+  const eduFilter = typeof params.edu === 'string' ? params.edu : ''
+  const relLevelFilter = typeof params.relLevel === 'string' ? params.relLevel : ''
+  const profFilter = typeof params.prof === 'string' ? params.prof : ''
+  const minHeight = typeof params.minH === 'string' ? params.minH : ''
+  const maxHeight = typeof params.maxH === 'string' ? params.maxH : ''
+  const nidOnly = params.nidOnly === '1'
+  const neverMarriedOnly = params.neverMarried === '1'
 
   if (currentPage > FREE_MAX_PAGES) {
     return (
@@ -98,6 +106,23 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
     filtered = filtered.filter((p: any) => p.marital_status === maritalFilter)
   }
 
+  // Advanced filters (premium)
+  if (eduFilter) {
+    filtered = filtered.filter((p: any) => p.education === eduFilter)
+  }
+  if (relLevelFilter) {
+    filtered = filtered.filter((p: any) => p.religious_level === relLevelFilter)
+  }
+  if (profFilter) {
+    filtered = filtered.filter((p: any) => p.profession === profFilter)
+  }
+  if (nidOnly) {
+    filtered = filtered.filter((p: any) => p.nid_verified === true)
+  }
+  if (neverMarriedOnly) {
+    filtered = filtered.filter((p: any) => p.marital_status === 'Never married')
+  }
+
   const totalProfiles = filtered.length
   const totalPages = Math.ceil(totalProfiles / PROFILES_PER_PAGE)
   const startIndex = (currentPage - 1) * PROFILES_PER_PAGE
@@ -127,6 +152,9 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
             Thousands of verified profiles waiting for you
           </p>
         </div>
+
+        {/* Advanced Search */}
+        <AdvancedSearch userGender={userGender} excludeId={excludeId} />
 
         {/* Simple filter bar */}
         <form method="GET" action="/profiles" style={{
