@@ -99,8 +99,8 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
               <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-6 mb-6">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-black text-gray-900 mb-2">{currentPage === 3 ? "Enjoying the matches? Thousands more await..." : "Unlock Your Full Potential on Biyekori"}</h3>
-                    <p className="text-sm text-gray-600 mb-3">{currentPage === 3 ? "You are seeing a small preview. Upgrade to discover verified profiles from Bangladesh, Middle East, UK, USA, Canada and beyond." : "Thousands of verified profiles worldwide are waiting. Your perfect match could be one click away."}</p>
+                    <h3 className="text-xl font-black text-gray-900 mb-2">{currentPage === 3 ? "Enjoying the profiles?" : currentPage === 4 ? "Your Perfect Match is Closer Than You Think" : "Last Chance — Upgrade to Keep Browsing"}</h3>
+                    <p className="text-sm text-gray-600 mb-3">{currentPage === 3 ? "You have seen a small selection. Thousands more verified profiles from Bangladesh, UK, USA, Canada and Middle East are waiting." : currentPage === 4 ? "Premium members get 10x more responses. Upgrade now and find your match faster." : "You have reached the free browsing limit. Upgrade to continue discovering your perfect match."}</p>
                     <ul className="space-y-1">
                       <li className="text-sm text-gray-700">Unlimited access to verified profiles worldwide</li>
                       <li className="text-sm text-gray-700">Send unlimited interests — no monthly cap</li>
