@@ -99,18 +99,18 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
               <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-6 mb-6">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-black text-gray-900 mb-2">Your Perfect Match is Out There!</h3>
-                    <p className="text-sm text-gray-600 mb-3">You are viewing a limited selection. Upgrade to unlock thousands of verified profiles and find your ideal partner.</p>
+                    <h3 className="text-xl font-black text-gray-900 mb-2">{currentPage === 3 ? "Enjoying the matches? Thousands more await..." : "Unlock Your Full Potential on Biyekori"}</h3>
+                    <p className="text-sm text-gray-600 mb-3">{currentPage === 3 ? "You are seeing a small preview. Upgrade to discover verified profiles from Bangladesh, Middle East, UK, USA, Canada and beyond." : "Thousands of verified profiles worldwide are waiting. Your perfect match could be one click away."}</p>
                     <ul className="space-y-1">
-                      <li className="text-sm text-gray-700">Unlock thousands of verified profiles across Bangladesh</li>
-                      <li className="text-sm text-gray-700">Send unlimited interests to potential matches</li>
-                      <li className="text-sm text-gray-700">View phone numbers and contact details directly</li>
-                      <li className="text-sm text-gray-700">Appear at the top of search results</li>
+                      <li className="text-sm text-gray-700">Unlimited access to verified profiles worldwide</li>
+                      <li className="text-sm text-gray-700">Send unlimited interests — no monthly cap</li>
+                      <li className="text-sm text-gray-700">View phone numbers and contact details</li>
+                      <li className="text-sm text-gray-700">Priority placement — appear at the top</li>
                     </ul>
                   </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-600 mb-1">Starting at</p>
-                    <p className="text-4xl font-black text-rose-600 mb-3">৳100</p>
+                    <p className="text-4xl font-black text-rose-600 mb-3">৳799/mo</p>
                     <Link href="/pricing" className="px-8 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-xl font-bold hover:shadow-lg transition inline-block">
                       Upgrade Now
                     </Link>
