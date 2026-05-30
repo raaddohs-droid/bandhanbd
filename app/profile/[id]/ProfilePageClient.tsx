@@ -232,11 +232,96 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { matchScore, predictability } = calculateScores(profile)
 
+  const [interestSent, setInterestSent] = useState(false)
+  const [actionMsg, setActionMsg] = useState<{text: string, type: 'info'|'success'|'upgrade'} | null>(null)
+
   useEffect(() => {
     if (profile?.id) recordView(String(profile.id));
     const userData = localStorage.getItem('biyekori_user');
     setIsLoggedIn(!!userData);
+
+    // Check if interest already sent
+    if (userData) {
+      const user = JSON.parse(userData);
+      fetch(`/api/interests/list?userId=${user.id}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.sent && data.sent.some((s: any) => String(s.target_id) === String(profile.id))) {
+            setInterestSent(true);
+          }
+        })
+        .catch(() => {});
+    }
   }, [profile?.id])
+
+  const showMsg = (text: string, type: 'info'|'success'|'upgrade') => {
+    setActionMsg({text, type});
+    setTimeout(() => setActionMsg(null), 5000);
+  }
+
+  const handleSendInterest = async () => {
+    const userData = localStorage.getItem('biyekori_user');
+    if (!userData) { window.location.href = '/register?reason=interest'; return; }
+    if (interestSent) return;
+    const user = JSON.parse(userData);
+    try {
+      const res = await fetch('/api/interests/send', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ senderId: user.id, targetId: profile.id })
+      });
+      const data = await res.json();
+      if (data.success) { setInterestSent(true); showMsg('Interest sent successfully!', 'success'); }
+      else if (data.upgrade) { showMsg('You have reached your free limit. Upgrade to send more interests.', 'upgrade'); }
+      else { showMsg(data.message || 'Could not send interest. Please try again.', 'info'); }
+    } catch { showMsg('Something went wrong. Please try again.', 'info'); }
+  }
+
+  const handleSendMessage = async () => {
+    const userData = localStorage.getItem('biyekori_user');
+    if (!userData) { window.location.href = '/register?reason=message'; return; }
+    const user = JSON.parse(userData);
+    const isPaid = user.plan && user.plan !== 'free';
+
+    if (isPaid) {
+      // Paid users can message anyone
+      showMsg('Messaging coming soon. Your interest has been noted.', 'info');
+      return;
+    }
+
+    // Free user — check interest status
+    if (!interestSent) {
+      showMsg('Please send an interest first before messaging.', 'info');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/interests/list?userId=${user.id}`);
+      const data = await res.json();
+      const match = data.sent?.find((s: any) => String(s.target_id) === String(profile.id));
+      if (match && match.status === 'accepted') {
+        // Mutual — upgrade prompt
+        showMsg('Your interest was accepted! Upgrade to start messaging.', 'upgrade');
+      } else {
+        showMsg('Waiting for them to accept your interest before you can message.', 'info');
+      }
+    } catch {
+      showMsg('Could not check interest status. Please try again.', 'info');
+    }
+  }
+
+  const handleDownloadBiodata = () => {
+    const userData = localStorage.getItem('biyekori_user');
+    if (!userData) { window.location.href = '/register?reason=biodata'; return; }
+    window.location.href = '/biodata/' + profile.id;
+  }
+
+  const handleShareWhatsApp = () => {
+    const url = encodeURIComponent(`https://biyekori.com/profile/${profile.id}`);
+    const name = profile.full_name || 'this profile';
+    const msg = encodeURIComponent(`Ei profile ta dekho — ${name} — biyekori.com te: https://biyekori.com/profile/${profile.id}`);
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
+  }
 
   const matchCircle = 2 * Math.PI * 54
   const predCircle = 2 * Math.PI * 54
@@ -458,11 +543,40 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
         )}
 
         <div className="bg-white rounded-2xl shadow-lg p-6">
+          {actionMsg && (
+            <div className={`mb-4 p-4 rounded-xl text-sm font-medium text-center ${actionMsg.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : actionMsg.type === 'upgrade' ? 'bg-purple-50 text-purple-700 border border-purple-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
+              {actionMsg.text}
+              {actionMsg.type === 'upgrade' && (
+                <a href="/pricing" className="ml-2 underline font-bold">View Plans</a>
+              )}
+            </div>
+          )}
           <div className="flex flex-wrap gap-4 justify-center">
-            <button className="px-8 py-3 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all">💌 Send Interest</button>
-            <button className="px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all">💬 Send Message</button>
-            <button className="px-8 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-gray-400 transition-all">📥 Download Biodata</button>
-            <button className="px-8 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-gray-400 transition-all">🔗 Shortlist</button>
+            <button
+              onClick={handleSendInterest}
+              disabled={interestSent}
+              className={`px-8 py-3 font-semibold rounded-lg transition-all ${interestSent ? 'bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed' : 'bg-gradient-to-r from-pink-500 to-pink-600 text-white hover:shadow-lg'}`}
+            >
+              {interestSent ? 'Interest Sent' : 'Express Interest'}
+            </button>
+            <button
+              onClick={handleSendMessage}
+              className="px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+            >
+              Send Message
+            </button>
+            <button
+              onClick={handleDownloadBiodata}
+              className="px-8 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-pink-400 transition-all"
+            >
+              Download Biodata
+            </button>
+            <button
+              onClick={handleShareWhatsApp}
+              className="px-8 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 hover:shadow-lg transition-all"
+            >
+              Share on WhatsApp
+            </button>
           </div>
         </div>
 
