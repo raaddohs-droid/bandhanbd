@@ -180,17 +180,7 @@ export default function ProfileCard({ profile, currentUserPackage = "prottasha",
           </div>
         </div>
 
-        {monthlyIncome && (
-          <div className="bg-green-50 p-3 rounded-xl mb-3 relative overflow-hidden">
-            <p className="text-xs text-green-700 mb-0.5 font-bold">Monthly Income</p>
-            <p className="text-base font-black text-green-900">{canViewContact ? "BDT " + monthlyIncome.toLocaleString() : "BDT ****"}</p>
-            {!canViewContact && (
-              <div className="absolute inset-0 backdrop-blur-sm bg-white/60 flex items-center justify-center rounded-xl">
-                <span className="text-xs font-bold text-gray-700">Premium Only</span>
-              </div>
-            )}
-          </div>
-        )}
+
 
         {profile.phone && (
           <div className={"rounded-xl p-3 mb-3 border-2 " + (canViewContact ? "bg-green-50 border-green-300" : "bg-rose-50 border-rose-300")}>
@@ -218,28 +208,9 @@ export default function ProfileCard({ profile, currentUserPackage = "prottasha",
               Waiting for Response...
             </div>
           )}
-          <div className="grid grid-cols-2 gap-2">
-            <Link href={"/profile/" + profile.id} className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2.5 rounded-xl font-bold text-sm text-center">
-              View Profile
-            </Link>
-            <button onClick={() => { const u = localStorage.getItem("biyekori_user"); if (!u) { window.location.href = "/register?reason=biodata"; return; } window.location.href = "/biodata/" + profile.id; }} className="bg-gradient-to-r from-green-500 to-teal-500 text-white py-2.5 rounded-xl font-bold text-sm col-span-2 mt-1" style={{display:"block",textAlign:"center",width:"100%",border:"none",cursor:"pointer"}}>
-              Download PDF Biodata
-            </button>
-            <div className="relative">
-              <button onClick={() => setShowGiftMenu(!showGiftMenu)} className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2.5 rounded-xl font-bold text-sm">
-                Send Gift
-              </button>
-              {showGiftMenu && (
-                <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-2xl border-2 border-pink-200 p-3 w-48 z-20">
-                  {GIFTS.map(([g, p]) => (
-                    <button key={g} onClick={() => handleSendGift(g, p)} className="w-full text-left px-3 py-2 hover:bg-pink-50 rounded-lg text-sm flex justify-between">
-                      <span>{g}</span><span className="font-bold text-rose-600">BDT {p}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <Link href={"/profile/" + profile.id} className="block w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2.5 rounded-xl font-bold text-sm text-center">
+            View Profile
+          </Link>
         </div>
       </div>
     </div>
