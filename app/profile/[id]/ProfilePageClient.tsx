@@ -38,7 +38,7 @@ function calculateScores(profile: any) {
   breakdown.push({
     factor: 'Age Preference', icon: '🎂', score: ageScore, max: 15, matched: ageInRange,
     reason: ageInRange ? `Age ${age} is within typical preference range` : `Age ${age} is outside the typical preference range`,
-    tip: 'Log in to set your exact age preference for accurate matching'
+    tip: 'Age compatibility is important for long-term happiness'
   })
 
   const eduRank: Record<string, number> = { 'SSC': 1, 'HSC': 2, "Bachelor's": 3, "Master's": 4, 'Medical': 5, 'Engineering': 5, 'Law': 4 }
@@ -54,7 +54,7 @@ function calculateScores(profile: any) {
   breakdown.push({
     factor: 'Location', icon: '📍', score: 7, max: 10, matched: true,
     reason: `Based in ${profile.city}, ${profile.district}`,
-    tip: 'Log in to match with people near your preferred location'
+    tip: 'Proximity makes meeting families easier'
   })
 
   const persScore = profile.personality_type ? 8 : 5
