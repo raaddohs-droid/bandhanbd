@@ -18,9 +18,11 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
   // Get logged-in user from localStorage (client-side will be handled)
   // For now, we'll use URL parameter or default behavior
   const userGender = typeof params.userGender === 'string' ? params.userGender : ''
+  const excludeId = typeof params.excludeId === 'string' ? params.excludeId : ''
   
   // SMART GENDER LOGIC: Auto-filter opposite gender
   let defaultGenderFilter = typeof params.gender === 'string' ? params.gender : ''
+  const allProfilesFiltered = excludeId ? allProfiles.filter((p: any) => String(p.id) !== String(excludeId)) : allProfiles
   
   // If user is male, show females by default. If female, show males.
   if (!defaultGenderFilter && userGender) {

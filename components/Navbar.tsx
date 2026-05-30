@@ -74,7 +74,7 @@ export default function Navbar() {
           {user ? (
             <>
               {[
-                { href: user ? `/profiles?userGender=${user.gender}` : '/profiles', label: 'Profiles' },
+                { href: user ? `/profiles?userGender=${user.gender}&excludeId=${user.id}` : '/profiles', label: 'Profiles' },
                 { href: '/interests', label: 'Interests' },
                 { href: '/dashboard', label: 'Dashboard' },
               ].map(({ href, label }) => (
@@ -93,7 +93,7 @@ export default function Navbar() {
           ) : (
             <>
               {[
-                { href: user ? `/profiles?userGender=${user.gender}` : '/profiles', label: 'Profiles' },
+                { href: user ? `/profiles?userGender=${user.gender}&excludeId=${user.id}` : '/profiles', label: 'Profiles' },
                 { href: '/pricing', label: 'Pricing' },
               ].map(({ href, label }) => (
                 <Link key={href} href={href} style={{
@@ -188,7 +188,7 @@ export default function Navbar() {
                     {[
                       { href: '/dashboard', icon: '', label: 'Dashboard' },
                       { href: '/interests', icon: '', label: 'My Interests' },
-                      { href: user ? `/profiles?userGender=${user.gender}` : '/profiles', icon: '', label: 'Browse Profiles' },
+                      { href: user ? `/profiles?userGender=${user.gender}&excludeId=${user.id}` : '/profiles', icon: '', label: 'Browse Profiles' },
                       { href: '/pricing', icon: '', label: 'Plans & Pricing' },
                     ].map(({ href, icon, label }) => (
                       <Link key={href} href={href} onClick={() => setShowMenu(false)}
