@@ -43,7 +43,7 @@ function getActivityStatus(profile: any): { label: string; color: string } | nul
     if (ageDays < 7) return { label: 'New Member', color: '#8b5cf6' }
     if (ageDays < 30) return { label: 'Recently active', color: '#9ca3af' }
   }
-  return null
+  return { label: 'Recently active', color: '#9ca3af' }
 }
 
 function ListRow({ profile }: { profile: any }) {
