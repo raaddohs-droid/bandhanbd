@@ -2,7 +2,7 @@ import UpgradeNudge from '@/components/UpgradeNudge'
 import AdvancedSearch from '@/components/profiles/AdvancedSearch'
 import { getProfiles } from '@/lib/supabase-server'
 import ProfileCard from '@/components/profiles/ProfileCard'
-import ProfilesGrid, { ViewToggle } from '@/components/profiles/ProfilesGrid'
+import ProfilesGrid from '@/components/profiles/ProfilesGrid'
 import Link from 'next/link'
 
 export const revalidate = 0
