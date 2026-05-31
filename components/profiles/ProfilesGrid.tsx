@@ -27,21 +27,24 @@ function getScoreColor(score: number): string {
   return '#e11d48'
 }
 
-function getActivityStatus(profile: any): { label: string; color: string } | null {
-  // Check real last_active first
-  if (profile.last_active) {
-    const diff = Date.now() - new Date(profile.last_active).getTime()
-    const mins = diff / 60000
-    if (mins < 30) return { label: 'Online now', color: '#10b981' }
-    if (mins < 1440) return { label: 'Active today', color: '#f59e0b' }
-    if (mins < 10080) return { label: 'Active this week', color: '#3b82f6' }
-  }
-  // Fall back to created_at for new profiles
+// Returns creation-based badge (New Member / Just Joined)
+function getCreationBadge(profile: any): { label: string; bg: string; color: string } | null {
   const created = profile.created_at || profile.createdAt
-  if (created) {
-    const ageDays = (Date.now() - new Date(created).getTime()) / 86400000
-    if (ageDays < 7) return { label: 'New Member', color: '#8b5cf6' }
-    if (ageDays < 30) return { label: 'Recently active', color: '#9ca3af' }
+  if (!created) return null
+  const ageDays = (Date.now() - new Date(created).getTime()) / 86400000
+  if (ageDays < 1) return { label: 'Just Joined', bg: '#f3e8ff', color: '#7c3aed' }
+  if (ageDays < 14) return { label: 'New Member', bg: '#dcfce7', color: '#15803d' }
+  return null
+}
+
+// Returns activity-based badge (Online now / Active today etc)
+function getActivityStatus(profile: any): { label: string; color: string } {
+  if (profile.last_active) {
+    const mins = (Date.now() - new Date(profile.last_active).getTime()) / 60000
+    if (mins < 30) return { label: 'Online now', color: '#10b981' }
+    if (mins < 240) return { label: 'Active today', color: '#f59e0b' }
+    if (mins < 4320) return { label: 'Active this week', color: '#3b82f6' }
+    if (mins < 10080) return { label: 'Active recently', color: '#6b7280' }
   }
   return { label: 'Recently active', color: '#9ca3af' }
 }
@@ -49,6 +52,7 @@ function getActivityStatus(profile: any): { label: string; color: string } | nul
 function ListRow({ profile }: { profile: any }) {
   const score = getQuickScore(profile)
   const activity = getActivityStatus(profile)
+  const creationBadge = getCreationBadge(profile)
   const photoUrl = profile.photo_url || profile.photoUrl
   const name = profile.full_name || profile.name || 'Anonymous'
   const isPremium = profile.package !== 'prottasha'
@@ -135,6 +139,14 @@ function ListRow({ profile }: { profile: any }) {
 
       {/* Middle: info section */}
       <div style={{ flex: 1, padding: '16px 20px', minWidth: 0 }}>
+        {/* Creation badge */}
+        {creationBadge && (
+          <div style={{ marginBottom: '4px' }}>
+            <span style={{ fontSize: '10px', fontWeight: 700, color: creationBadge.color, background: creationBadge.bg, borderRadius: '20px', padding: '2px 10px', letterSpacing: '0.3px' }}>
+              {creationBadge.label}
+            </span>
+          </div>
+        )}
         {/* Name row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
           <span style={{ fontSize: '17px', fontWeight: 800, color: '#111827' }}>{name}</span>
@@ -146,12 +158,10 @@ function ListRow({ profile }: { profile: any }) {
           )}
         </div>
         {/* Activity */}
-        {activity && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: activity.color, display: 'inline-block', flexShrink: 0 }} />
-            <span style={{ fontSize: '11px', color: activity.color, fontWeight: 600 }}>{activity.label}</span>
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px' }}>
+          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: activity.color, display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ fontSize: '11px', color: activity.color, fontWeight: 600 }}>{activity.label}</span>
+        </div>
         {/* 2-col info grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px 20px', marginBottom: '8px' }}>
           {infoRows.map((row, i) => row.some(Boolean) && (
