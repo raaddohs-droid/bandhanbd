@@ -110,7 +110,7 @@ function ListRow({ profile }: { profile: any }) {
       {/* Photo section */}
       <div style={{ position: 'relative', flexShrink: 0, width: '160px' }}>
         {photoUrl ? (
-          <img src={photoUrl} alt={name} style={{ width: '160px', height: '100%', minHeight: '180px', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+          <img src={photoUrl} alt={name} style={{ width: '160px', height: '100%', minHeight: '180px', objectFit: 'cover', objectPosition: 'center 15%', display: 'block' }} />
         ) : (
           <div style={{ width: '160px', minHeight: '180px', background: 'linear-gradient(135deg,#fce7f3,#ede9fe)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
             {profile.gender === 'male' ? '👨' : '👩'}
