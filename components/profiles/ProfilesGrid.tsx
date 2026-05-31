@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import ProfileCard from './ProfileCard'
 import Link from 'next/link'
 
@@ -50,7 +50,7 @@ function ListRow({ profile }: { profile: any }) {
       const stored = localStorage.getItem('biyekori_user')
       if (stored) {
         const user = JSON.parse(stored)
-        fetch(`/api/interests/list?userId=${user.id}`)
+        fetch('/api/interests/list?userId=' + user.id)
           .then(r => r.json())
           .then(data => {
             if (data.sent?.some((s: any) => String(s.receiver_id) === String(profile.id))) {
@@ -61,7 +61,8 @@ function ListRow({ profile }: { profile: any }) {
     } catch(e) {}
   }, [profile.id])
 
-  const handleSendInterest = async () => {
+  const handleSendInterest = async (e: React.MouseEvent) => {
+    e.stopPropagation()
     const stored = localStorage.getItem('biyekori_user')
     if (!stored) { window.location.href = '/register?reason=interest'; return; }
     if (interestSent) return
@@ -77,80 +78,125 @@ function ListRow({ profile }: { profile: any }) {
     } catch(e) {}
   }
 
+  const infoRows = [
+    [
+      profile.age ? profile.age + ' yrs' + (profile.height ? ', ' + profile.height : '') : null,
+      profile.marital_status || null
+    ],
+    [
+      profile.religion ? profile.religion + (profile.religious_level ? ', ' + profile.religious_level : '') : null,
+      (profile.city || profile.district) || null
+    ],
+    [
+      profile.education || null,
+      profile.profession || null
+    ]
+  ]
+
   return (
-    <div style={{
-      background: 'white', borderRadius: '16px', padding: '16px',
-      border: isPremium ? '2px solid #fcd34d' : '1px solid #f3f4f6',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-      display: 'flex', gap: '16px', alignItems: 'center',
-      transition: 'box-shadow 0.2s', cursor: 'pointer',
-      position: 'relative'
-    }}
-    onClick={(e) => {
-      if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('a')) return;
-      window.location.href = '/profile/' + profile.id;
-    }}>
-      {/* Photo */}
-      <div style={{ position: 'relative', flexShrink: 0 }}>
-        <div style={{ width: '90px', height: '120px', borderRadius: '12px', overflow: 'hidden', background: '#f3f4f6' }}>
-          {photoUrl ? (
-            <img src={photoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
-          ) : (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px' }}>
-              {profile.gender === 'male' ? '👨' : '👩'}
-            </div>
-          )}
-        </div>
-        {/* AI score badge */}
-        <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', background: getScoreColor(score), borderRadius: '20px', padding: '2px 8px', display: 'flex', alignItems: 'center', gap: '3px', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', whiteSpace: 'nowrap' }}>
+    <div
+      onClick={() => window.location.href = '/profile/' + profile.id}
+      style={{
+        background: 'white', borderRadius: '16px',
+        border: isPremium ? '2px solid #fcd34d' : '1px solid #e5e7eb',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+        display: 'flex', gap: '0', alignItems: 'stretch',
+        transition: 'box-shadow 0.2s, transform 0.1s', cursor: 'pointer',
+        overflow: 'hidden'
+      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 6px 24px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-1px)' }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'; (e.currentTarget as HTMLDivElement).style.transform = 'none' }}
+    >
+      {/* Photo section */}
+      <div style={{ position: 'relative', flexShrink: 0, width: '120px' }}>
+        {photoUrl ? (
+          <img src={photoUrl} alt={name} style={{ width: '120px', height: '100%', minHeight: '160px', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+        ) : (
+          <div style={{ width: '120px', minHeight: '160px', background: 'linear-gradient(135deg,#fce7f3,#ede9fe)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>
+            {profile.gender === 'male' ? '👨' : '👩'}
+          </div>
+        )}
+        {/* AI score */}
+        <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', background: getScoreColor(score), borderRadius: '20px', padding: '3px 10px', display: 'flex', alignItems: 'center', gap: '3px', boxShadow: '0 2px 6px rgba(0,0,0,0.25)', whiteSpace: 'nowrap' }}>
           <span style={{ fontSize: '9px', color: 'white', fontWeight: 600, opacity: 0.85 }}>AI</span>
-          <span style={{ fontSize: '11px', fontWeight: 800, color: 'white' }}>{score}%</span>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'white' }}>{score}%</span>
         </div>
       </div>
 
-      {/* Info */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      {/* Middle: info section */}
+      <div style={{ flex: 1, padding: '16px 20px', minWidth: 0 }}>
+        {/* Name row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '15px', fontWeight: 800, color: '#111827' }}>{name}</span>
+          <span style={{ fontSize: '17px', fontWeight: 800, color: '#111827' }}>{name}</span>
           {isPremium && (
-            <span style={{ fontSize: '10px', fontWeight: 700, color: '#b45309', background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: '6px', padding: '1px 6px' }}>Premium</span>
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#b45309', background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: '6px', padding: '2px 7px' }}>Premium</span>
           )}
-          <span style={{ fontSize: '11px', color: activity.color, fontWeight: 600 }}>• {activity.label}</span>
+          {profile.nid_verified && (
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#059669', background: '#ecfdf5', border: '1px solid #6ee7b7', borderRadius: '6px', padding: '2px 7px' }}>NID Verified</span>
+          )}
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
-          {profile.age && <span style={{ fontSize: '12px', color: '#6b7280' }}>{profile.age} yrs</span>}
-          {profile.height && <span style={{ fontSize: '12px', color: '#6b7280' }}>• {profile.height}</span>}
-          {(profile.city || profile.district) && <span style={{ fontSize: '12px', color: '#6b7280' }}>• {profile.city || profile.district}</span>}
-          {profile.religion && <span style={{ fontSize: '12px', color: '#6b7280' }}>• {profile.religion}</span>}
+        {/* Activity */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '12px' }}>
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: activity.color, display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ fontSize: '12px', color: activity.color, fontWeight: 600 }}>{activity.label}</span>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-          {profile.education && <span style={{ fontSize: '11px', color: '#4b5563', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '2px 8px' }}>{profile.education}</span>}
-          {profile.profession && <span style={{ fontSize: '11px', color: '#4b5563', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '2px 8px' }}>{profile.profession}</span>}
-          {profile.marital_status && <span style={{ fontSize: '11px', color: '#4b5563', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '2px 8px' }}>{profile.marital_status}</span>}
+        {/* 2-col info grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 16px', marginBottom: '10px' }}>
+          {infoRows.map((row, i) => row.some(Boolean) && (
+            <React.Fragment key={i}>
+              {row[0] && <span style={{ fontSize: '13px', color: '#374151' }}>{row[0]}</span>}
+              {row[1] && <span style={{ fontSize: '13px', color: '#374151' }}>{row[1]}</span>}
+            </React.Fragment>
+          ))}
         </div>
+        {/* About me snippet */}
+        {profile.about_me && (
+          <p style={{ margin: 0, fontSize: '12px', color: '#6b7280', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {profile.about_me}
+          </p>
+        )}
       </div>
 
-      {/* Actions */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flexShrink: 0 }}>
-        <button
-          onClick={handleSendInterest}
-          disabled={interestSent}
-          style={{
-            padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 700,
-            border: 'none', cursor: interestSent ? 'not-allowed' : 'pointer',
-            background: interestSent ? '#f3f4f6' : 'linear-gradient(135deg,#e11d48,#db2777)',
-            color: interestSent ? '#9ca3af' : 'white', whiteSpace: 'nowrap'
-          }}
-        >
-          {interestSent ? 'Sent' : 'Express Interest'}
-        </button>
-        <Link href={'/profile/' + profile.id} style={{
-          padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 700,
-          background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)',
-          color: 'white', textDecoration: 'none', textAlign: 'center', whiteSpace: 'nowrap'
-        }}>
-          View Profile
-        </Link>
+      {/* Right: action section */}
+      <div style={{ flexShrink: 0, width: '130px', borderLeft: '1px solid #f3f4f6', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '16px' }}>
+        <p style={{ margin: '0 0 4px', fontSize: '11px', color: '#9ca3af', fontWeight: 600, textAlign: 'center' }}>Interested?</p>
+        {/* Express Interest - circular */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+          <button
+            onClick={handleSendInterest}
+            disabled={interestSent}
+            style={{
+              width: '52px', height: '52px', borderRadius: '50%', border: 'none', cursor: interestSent ? 'default' : 'pointer',
+              background: interestSent ? '#f3f4f6' : 'linear-gradient(135deg,#10b981,#059669)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: interestSent ? 'none' : '0 4px 12px rgba(16,185,129,0.3)',
+              transition: 'all 0.2s'
+            }}
+          >
+            {interestSent ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            )}
+          </button>
+          <span style={{ fontSize: '10px', color: interestSent ? '#9ca3af' : '#059669', fontWeight: 600 }}>{interestSent ? 'Sent' : 'Connect'}</span>
+        </div>
+        {/* View Profile - circular */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+          <Link
+            href={'/profile/' + profile.id}
+            onClick={e => e.stopPropagation()}
+            style={{
+              width: '52px', height: '52px', borderRadius: '50%',
+              border: '2px solid #e5e7eb', background: 'white',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              textDecoration: 'none', transition: 'all 0.2s'
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </Link>
+          <span style={{ fontSize: '10px', color: '#6b7280', fontWeight: 600 }}>View</span>
+        </div>
       </div>
     </div>
   )
