@@ -2,6 +2,7 @@ import UpgradeNudge from '@/components/UpgradeNudge'
 import AdvancedSearch from '@/components/profiles/AdvancedSearch'
 import { getProfiles } from '@/lib/supabase-server'
 import ProfileCard from '@/components/profiles/ProfileCard'
+import ProfilesGrid from '@/components/profiles/ProfilesGrid'
 import Link from 'next/link'
 
 export const revalidate = 0
@@ -245,16 +246,7 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
         {/* Profile grid */}
         {paginatedProfiles.length > 0 ? (
           <>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '20px',
-              marginBottom: '32px'
-            }}>
-              {paginatedProfiles.map((profile: any) => (
-                <ProfileCard key={profile.id} profile={profile} />
-              ))}
-            </div>
+            <ProfilesGrid profiles={paginatedProfiles} />
 
             {/* Pagination */}
             {totalPages > 1 && (
