@@ -230,6 +230,7 @@ function ScoreModal({ profile, onClose, isLoggedIn }: { profile: any, onClose: (
 export default function ProfilePageClient({ profile }: { profile: any }) {
   const [showModal, setShowModal] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [photoIndex, setPhotoIndex] = useState(0)
   const { matchScore, predictability } = calculateScores(profile)
 
   const [interestSent, setInterestSent] = useState<boolean | null>(null)
@@ -411,13 +412,61 @@ export default function ProfilePageClient({ profile }: { profile: any }) {
           <div className="px-8 pb-8">
             <div className="flex flex-col md:flex-row gap-6 -mt-16">
               <div className="flex-shrink-0">
-                {profile.photo_url ? (
-                  <img src={profile.photo_url} alt={profile.full_name || 'Profile'} className="w-40 h-40 rounded-2xl border-4 border-white shadow-lg object-cover" />
-                ) : (
-                  <div className="w-40 h-40 bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl border-4 border-white shadow-lg flex items-center justify-center">
-                    <span className="text-4xl">{profile.gender === 'male' ? '👨' : '👩'}</span>
-                  </div>
-                )}
+                {(() => {
+                  const mainPhoto = profile.photo_url
+                  const additional = Array.isArray(profile.additional_photos) ? profile.additional_photos : []
+                  const allPhotos = mainPhoto ? [mainPhoto, ...additional] : additional
+                  const total = allPhotos.length
+
+                  if (total === 0) {
+                    return (
+                      <div style={{ width: '200px', height: '220px', background: 'linear-gradient(135deg,#fce7f3,#ede9fe)', borderRadius: '16px', border: '4px solid white', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontSize: '48px' }}>{profile.gender === 'male' ? '👨' : '👩'}</span>
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <div style={{ width: '200px' }}>
+                      {/* Main photo */}
+                      <div style={{ position: 'relative', width: '200px', height: '220px', borderRadius: '16px', overflow: 'hidden', border: '4px solid white', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
+                        <img
+                          src={allPhotos[photoIndex]}
+                          alt={profile.full_name || 'Profile'}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', transition: 'opacity 0.2s' }}
+                        />
+                        {/* Counter */}
+                        {total > 1 && (
+                          <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', color: 'white', fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '20px' }}>
+                            {photoIndex + 1} of {total}
+                          </div>
+                        )}
+                        {/* Left arrow */}
+                        {total > 1 && photoIndex > 0 && (
+                          <button onClick={() => setPhotoIndex(photoIndex - 1)} style={{ position: 'absolute', left: '6px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.5)', border: 'none', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                          </button>
+                        )}
+                        {/* Right arrow */}
+                        {total > 1 && photoIndex < total - 1 && (
+                          <button onClick={() => setPhotoIndex(photoIndex + 1)} style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.5)', border: 'none', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                          </button>
+                        )}
+                      </div>
+                      {/* Thumbnail strip */}
+                      {total > 1 && (
+                        <div style={{ display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' }}>
+                          {allPhotos.map((photo: string, i: number) => (
+                            <button key={i} onClick={() => setPhotoIndex(i)} style={{ width: '44px', height: '44px', borderRadius: '8px', overflow: 'hidden', border: i === photoIndex ? '2px solid #e11d48' : '2px solid #e5e7eb', padding: 0, cursor: 'pointer', flexShrink: 0 }}>
+                              <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })()}
               </div>
               <div className="flex-1 mt-4 md:mt-16">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{profile.full_name || 'Anonymous'}</h1>
