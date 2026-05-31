@@ -4,6 +4,7 @@ import { getProfiles } from '@/lib/supabase-server'
 import ProfileCard from '@/components/profiles/ProfileCard'
 import ProfilesGrid from '@/components/profiles/ProfilesGrid'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
 export const revalidate = 0
 export const dynamic = 'force-dynamic'
@@ -156,7 +157,11 @@ export default async function ProfilesPage({ searchParams }: PageProps) {
         </div>
 
         {/* Advanced Search */}
-        <AdvancedSearch userGender={userGender} excludeId={excludeId} />
+        <Suspense fallback={null}>
+          <Suspense fallback={null}>
+          <AdvancedSearch userGender={userGender} excludeId={excludeId} />
+        </Suspense>
+        </Suspense>
 
         {/* Simple filter bar */}
         <form method="GET" action="/profiles" style={{
